@@ -1,9 +1,15 @@
 import React from 'react';
 import './App.css';
-import SquareRoom from './component/SquareRoom/SquareRoom';
+import Container from './component/Container/Container';
 import MasterLayout from './layout/MasterLayout';
 
-const App: React.FC = () => {
+interface Props {
+	roomType?: string;
+}
+
+const App: React.FC<Props> = ({ roomType }) => {
+	// roomType = 'Circle';
+	roomType = 'Square';
 	return (
 		<MasterLayout>
 			<header className=" bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
@@ -23,7 +29,7 @@ const App: React.FC = () => {
 				</button>
 			</div>
 			<main className="flex-grow flex justify-center items-center">
-				<SquareRoom />
+				<Container value={roomType} />
 			</main>
 		</MasterLayout>
 	);
