@@ -7,3 +7,5 @@ interface Props {
 const MasterLayout: React.FC<Props> = ({ children }) => {
   return <div>{children}</div>;
 };
+
+export default MasterLayout;
