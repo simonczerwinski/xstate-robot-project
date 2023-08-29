@@ -1,7 +1,10 @@
 import React from 'react';
 
+export type ButtonSize = 'small' | 'medium' | 'large';
+
 interface Props {
 	children: React.ReactNode;
+	size?: ButtonSize;
 	className?: string;
 	colors?: {
 		background: string;

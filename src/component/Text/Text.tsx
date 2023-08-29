@@ -26,7 +26,6 @@ const Text: React.FC<TextProps> = ({
 	...props
 }) => {
 	const Tag: any = tagProps[as];
-	console.log('Tag', Tag);
 	return (
 		<Tag className={`text ${margin ? 'w-margin' : ''} ${className}`} {...props}>
 			{text}
