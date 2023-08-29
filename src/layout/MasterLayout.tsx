@@ -6,7 +6,9 @@ interface Props {
 
 const MasterLayout: React.FC<Props> = ({ children }) => {
 	return (
-		<div className="overflow-x-hidden min-h-screen bg-gray-700">{children}</div>
+		<div className="flex flex-col overflow-x-hidden min-h-screen bg-gray-700">
+			{children}
+		</div>
 	);
 };
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import { RobotModel } from '../../models/robotModel';
+import { IModelRobot } from '../../models/robotModel';
 
 interface Props {
-	robot: RobotModel;
+	robot?: IModelRobot;
 }
 
 const Robot: React.FC<Props> = ({ robot }) => {
