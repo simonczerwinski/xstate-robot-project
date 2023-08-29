@@ -4,12 +4,14 @@
             "id": 1,
             "name": "simon",
             "inputData": "VGVGVH",
+            "room": "Square",
             "createdData": "2023-01-01T00:00:00Z"
         },
         {
             "id": 2,
             "name": "simon2",
             "inputData": "VGVGVHG",
+            "room": "Circle",
             "createdData": "2023-01-01T00:00:00Z"
         }
     ]
