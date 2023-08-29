@@ -15,14 +15,27 @@ const App: React.FC<Props> = ({ roomType }) => {
 	roomType = 'Square';
 	return (
 		<MasterLayout>
-			<header className=" bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
+			<header className="bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
+				{/* <img src={logo} alt="Logo" className="w-10 h-10 mr-4" /> */}
+
+				<Button
+					className="py-2 px-4 rounded border"
+					colors={{
+						background: 'transparent',
+						text: 'white',
+						hoverBackground: 'gray-100',
+						hoverText: 'black',
+					}}
+				>
+					<Text text="History" as="span" className="text-m font-medium" />
+				</Button>
+			</header>
+			<main className="flex flex-col w-full justify-center items-center">
 				<Text
 					text="Welcome to my Robot Project"
 					as="h1"
 					className="text-2xl font-bold text-white"
 				/>
-			</header>
-			<main className="flex flex-col w-full justify-center items-center">
 				<div className="flex flex-col items-center justify-center pb-8">
 					<div className="py-4 flex items-center m-10">
 						<Text
@@ -35,21 +48,21 @@ const App: React.FC<Props> = ({ roomType }) => {
 						<Button
 							className="w-20 h-20 font-bold py-2 px-4 rounded mb-2"
 							colors={{
-								background: 'white',
-								text: 'blue-900',
-								hoverBackground: 'blue-100',
-								hoverText: 'white',
+								background: 'blue-900',
+								text: 'white',
+								hoverBackground: 'blue-600',
+								hoverText: 'blue-100',
 							}}
 						>
-							<Text text="Square" as="span" className="text-m font-medium" />
+							<Text text="Square" as="span" className="text-m font-medium " />
 						</Button>
 						<Button
 							className="w-20 h-20 font-bold py-2 px-4 rounded-full"
 							colors={{
-								background: 'white',
-								text: 'blue-900',
-								hoverBackground: 'blue-100',
-								hoverText: 'white',
+								background: 'blue-900',
+								text: 'white',
+								hoverBackground: 'blue-600',
+								hoverText: 'blue-100',
 							}}
 						>
 							<Text text="Circle" as="span" className="text-m font-medium" />

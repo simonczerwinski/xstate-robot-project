@@ -4,7 +4,7 @@ import Robot from '../Robot/Robot';
 
 const SquareRoom: React.FC = () => {
 	return (
-		<div className="relative w-full h-full bg-gradient-to-b from-black to-gray-900 text-white border border-gray-800 rounded">
+		<div className="relative w-full h-full bg-black text-white border border-gray-800 shadow-lg rounded">
 			<div className="absolute top-[-3rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
 				<Text text="North" as="span" className="text-xl font-normal" />
 			</div>
