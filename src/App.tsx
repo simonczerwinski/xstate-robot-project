@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Container from './component/Container/Container';
 import MasterLayout from './layout/MasterLayout';
 import Text from './component/Text/Text';
 import Button from './component/Button/Button';
 import Footer from './component/Footer/Footer';
+import Input from './component/Input/Input';
 
 interface Props {
 	roomType?: string;
 }
 
 const App: React.FC<Props> = ({ roomType }) => {
-	// roomType = 'Circle';
+	const [inputValue, setInputValue] = useState('');
+	const [inputData, setInputData] = useState('');
+
+	const handleInputChange = (value: string) => {
+		setInputValue(value);
+	};
+
+	const handleSubmit = () => {
+		setInputData(inputValue);
+	};
+
 	roomType = 'Square';
 	return (
 		<MasterLayout>
@@ -69,7 +80,30 @@ const App: React.FC<Props> = ({ roomType }) => {
 						</Button>
 					</div>
 				</div>
-				<Container value={roomType} className={'p-8 flex'} />
+				<div className="flex flex-row items-center">
+					<Input
+						className={'h-10 mr-2 p-2 font-normal rounded'}
+						value={inputValue}
+						onChange={handleInputChange}
+					/>
+					<Button
+						className="w-25 h-10 font-bold py-2 px-4 rounded my-10"
+						onClick={handleSubmit}
+						colors={{
+							background: 'blue-900',
+							text: 'white',
+							hoverBackground: 'blue-600',
+							hoverText: 'blue-100',
+						}}
+					>
+						Submit
+					</Button>
+				</div>
+				<Container
+					value={roomType}
+					inputValue={inputData}
+					className={'p-8 flex'}
+				/>
 			</main>
 			<Footer />
 		</MasterLayout>

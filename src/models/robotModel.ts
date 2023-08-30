@@ -3,13 +3,13 @@ interface Direction {
 }
 
 export interface IModelRobot {
-	id: number;
-	icon: string;
-	x: number;
-	y: number;
+	id?: number;
+	icon?: string;
+	x?: number;
+	y?: number;
 	direction?: Direction;
-	isPlaced: boolean;
-	isLost: boolean;
-	coordinates: string;
-	commands: string;
+	isPlaced?: boolean;
+	isLost?: boolean;
+	coordinates?: string;
+	commands?: string;
 }
