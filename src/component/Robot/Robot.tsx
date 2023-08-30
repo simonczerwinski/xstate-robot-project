@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Robot: React.FC<Props> = ({ robot }) => {
-	const { x, y, direction } = robot || {};
+	const { x, y, direction, coordinates, commands } = robot || {};
 
 	const { isHovered, onMouseEnter, onMouseLeave } = useHover();
 
