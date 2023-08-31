@@ -2,15 +2,15 @@ import React from 'react';
 import SquareRoom from '../SquareRoom/SquareRoom';
 
 interface Props {
-	value?: string;
+	room?: string;
 	inputValue?: string;
 	className?: string;
 }
 
-const Container: React.FC<Props> = ({ value, inputValue, className }) => {
+const Container: React.FC<Props> = ({ room, inputValue, className }) => {
 	return (
 		<div className={className}>
-			{value === 'Square' ? (
+			{room === 'Square' ? (
 				<div className="w-80 h-80 flex justify-center items-center">
 					<SquareRoom input={inputValue} />
 				</div>

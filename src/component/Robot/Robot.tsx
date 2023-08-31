@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IModelRobot } from '../../models/robotModel';
-import useHover from '../../hooks/useHover';
+import { useHover } from '../../hooks/useHover';
 
 interface Props {
 	robot?: IModelRobot;
+	currentState?: string;
 }
 
 const Robot: React.FC<Props> = ({ robot }) => {
@@ -14,9 +15,9 @@ const Robot: React.FC<Props> = ({ robot }) => {
 		transform: `scale(${scale})`,
 		transition: 'transform 0.3s ease',
 	};
-	console.log('x', x);
-	console.log('y', y);
-	console.log('direction', direction);
+	// useEffect(() => {
+	// 	console.log('robot TRIGGER', robot);
+	// }, [robot]);
 	return (
 		<div
 			className="w-12 h-12 bg-green-600 rounded-full cursor-pointer absolute"

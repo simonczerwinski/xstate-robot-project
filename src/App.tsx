@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChangeEvent } from 'react';
 import './App.css';
+import { useMachine } from '@xstate/react';
+import { commandMachine } from './state-machines/command.machine';
 import Container from './component/Container/Container';
 import MasterLayout from './layout/MasterLayout';
 import Text from './component/Text/Text';
 import Button from './component/Button/Button';
 import Footer from './component/Footer/Footer';
 import Input from './component/Input/Input';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
 	roomType?: string;
 }
 
-const App: React.FC<Props> = ({ roomType }) => {
-	const [inputValue, setInputValue] = useState('');
-	const [inputData, setInputData] = useState('');
+const App: React.FC<Props> = ({ roomType = 'Square' }) => {
+	const [state, send] = useMachine(commandMachine);
+	const [value, setValue] = useState('');
 
-	const handleInputChange = (value: string) => {
-		setInputValue(value);
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const inputValue = e.target.value || '';
+		setValue(inputValue);
 	};
+	useEffect(() => {
+		setTimeout(() => {
+			send('LOAD');
+		}, 500);
+	}, [send]);
 
-	const handleSubmit = () => {
-		setInputData(inputValue);
-	};
-
-	roomType = 'Square';
 	return (
 		<MasterLayout>
 			<header className="bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
@@ -42,11 +48,13 @@ const App: React.FC<Props> = ({ roomType }) => {
 				</Button>
 			</header>
 			<main className="flex flex-col w-full justify-center items-center">
+				<input type="text" placeholder="Enter your name" />
 				<Text
 					text="Welcome to my Robot Project"
 					as="h1"
 					className="text-2xl font-bold text-white"
 				/>
+
 				<div className="flex flex-col items-center justify-center pb-8">
 					<div className="py-4 flex items-center m-10">
 						<Text
@@ -81,28 +89,70 @@ const App: React.FC<Props> = ({ roomType }) => {
 					</div>
 				</div>
 				<div className="flex flex-row items-center">
-					<Input
-						className={'h-10 mr-2 p-2 font-normal rounded'}
-						value={inputValue}
-						onChange={handleInputChange}
-					/>
-					<Button
-						className="w-25 h-10 font-bold py-2 px-4 rounded my-10"
-						onClick={handleSubmit}
-						colors={{
-							background: 'blue-900',
-							text: 'white',
-							hoverBackground: 'blue-600',
-							hoverText: 'blue-100',
+					<form
+						className="flex flex-col items-center"
+						onSubmit={(e) => {
+							e.preventDefault();
+							console.log('value', value);
+							send({ type: 'SUBMIT', value: value });
 						}}
 					>
-						Submit
-					</Button>
+						<label className="text-white font-medium font-semibold mb-2">
+							<Text text="Enter your command" as="span" />
+						</label>
+						<div className="flex flex-row justify-items-center">
+							<input
+								className={'h-10 mr-2 p-2 font-normal rounded'}
+								placeholder="eg: VGHGV"
+								onChange={handleChange}
+								value={value}
+							/>
+
+							<Button
+								className="font-bold py-2 px-4 rounded mb-10"
+								type="submit"
+								colors={{
+									background: 'blue-900',
+									text: 'white',
+									hoverBackground: 'blue-600',
+									hoverText: 'blue-100',
+								}}
+							>
+								{state.matches('loading') ? (
+									<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
+										<Skeleton circle width={20} height={20} />
+									</SkeletonTheme>
+								) : (
+									<Text
+										text="Submit"
+										as="span"
+										className="text-m font-medium"
+									/>
+								)}
+							</Button>
+						</div>
+					</form>
+				</div>
+				<div className="flex flex-row items-center pb-10">
+					{state.context.showSuccess && (
+						<Text
+							text="Success"
+							as="span"
+							className="text-m font-medium text-white"
+						/>
+					)}
+					{state.context.showError && (
+						<Text
+							text="Error"
+							as="span"
+							className="text-m font-medium text-white"
+						/>
+					)}
 				</div>
 				<Container
-					value={roomType}
-					inputValue={inputData}
 					className={'p-8 flex'}
+					room={roomType}
+					inputValue={state.context.inputValue}
 				/>
 			</main>
 			<Footer />

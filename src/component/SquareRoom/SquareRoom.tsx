@@ -27,51 +27,22 @@ const direction: Direction = (x, y) => {
 };
 
 const SquareRoom: React.FC<Props> = ({ input }) => {
-	const [current, send] = useMachine(robotMachine);
-	const [position, setPosition] = useState({ x: 0, y: 0, direction: '' });
-	const divElement = document.getElementById('squareroom');
-	const roomPosition = divElement?.getBoundingClientRect();
-	console.log('position', position);
-	console.log('roomPosition', roomPosition);
+	const [robotState, sendRobot] = useMachine(robotMachine);
+	const getCommands = input?.toLocaleUpperCase().split('');
 
-	const getCommands = input?.split('');
+	useEffect(() => {
+		if (robotState.matches('idle')) {
+			console.log('Robot has finished moving');
+		}
+	}, [robotState]);
 
 	const handleMove = () => {
-		console.log('current', current);
-		console.log('handleMove');
 		return {
 			// Set gridsize (5x5) and multiply with 10 to get the correct position
-			x: [current.context.x * 10],
-			y: [current.context.y * 10],
-			direction: [current.context.direction],
+			x: [robotState.context.x * 10],
+			y: [robotState.context.y * 10],
+			direction: [robotState.context.direction],
 			timing: { duration: 5000 },
-		};
-	};
-	// const getCommands = (command: string) => {
-	// 	// set each position to robot
-	// 	switch (command) {
-	// 		case 'G':
-	// 			// forward
-	// 			setPosition((position) => ({ ...position, x: position.x + 1 }));
-
-	// 			break;
-	// 		case 'H':
-	// 			// right
-	// 			setPosition((position) => ({ ...position, y: position.y + 1 }));
-	// 			break;
-	// 		case 'V':
-	// 			// left
-	// 			setPosition((position) => ({ ...position, y: position.y - 1 }));
-	// 			break;
-
-	// 		default:
-	// 			break;
-	// 	}
-	// };
-	const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		return {
-			x: e.clientX - roomPosition!.left,
-			y: e.clientY - roomPosition!.top,
 		};
 	};
 	useEffect(() => {
@@ -81,22 +52,21 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 					switch (command) {
 						case 'G':
 							// forward
-							console.log('FORWARD');
-							send('FORWARD');
+							console.log('MOVE_FORWARD');
+							sendRobot('MOVE_FORWARD');
 							break;
 						case 'H':
 							// right
 							console.log('TURN_RIGHT');
-							send('TURN_RIGHT');
+							sendRobot('TURN_RIGHT');
 							break;
 						case 'V':
 							// left
 							console.log('TURN_LEFT');
-							send('TURN_LEFT');
+							sendRobot('TURN_LEFT');
 							break;
 
 						default:
-							console.error(`Weird command: ${command}?`);
 							break;
 					}
 				} else {
@@ -104,16 +74,16 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 				}
 			});
 		} else {
-			send('SET_CENTER');
+			sendRobot('SET_CENTER');
 		}
-	}, [input, send]);
+	}, [input, sendRobot]);
 
 	return (
-		<div className="relative flex flex-col w-full h-full ">
+		<div className="relative flex flex-col w-full h-full transition-all ease-in-out">
 			<div
 				id="squareroom"
 				className="w-full h-full bg-black text-white grid grid-cols-1 grid-rows-1 border-2 border-gray-100 shadow-lg rounded"
-				onClick={handleClick}
+				// onClick={handleClick}
 			>
 				<div className={`border border-gray-100 ${direction(0, 0)}`}>
 					<div className="absolute top-[-3rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
@@ -129,7 +99,7 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 						<Text text="East" as="span" className="text-xl font-normal" />
 					</div>
 				</div>
-				<Animate start={handleMove} update={handleMove}>
+				<Animate start={handleMove} enter={handleMove} update={handleMove}>
 					{(state) => {
 						const { x, y, direction } = state;
 						return (

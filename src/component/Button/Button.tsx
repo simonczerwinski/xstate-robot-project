@@ -12,10 +12,17 @@ interface Props {
 		hoverBackground: string;
 		hoverText: string;
 	};
+	type?: 'button' | 'submit' | 'reset';
 	onClick?: () => void;
 }
 
-const Button: React.FC<Props> = ({ children, className, colors, onClick }) => {
+const Button: React.FC<Props> = ({
+	children,
+	className,
+	colors,
+	type,
+	onClick,
+}) => {
 	const { background, text, hoverBackground, hoverText } = colors || {};
 
 	const baseStyle = `bg-${background} text-${text} transition ease-in-out duration-300`;
@@ -24,7 +31,7 @@ const Button: React.FC<Props> = ({ children, className, colors, onClick }) => {
 	const styleClasses = `${baseStyle} ${hoverStyle} ${className}`;
 
 	return (
-		<button onClick={onClick} className={styleClasses}>
+		<button type={type} onClick={onClick} className={styleClasses}>
 			{children}
 		</button>
 	);

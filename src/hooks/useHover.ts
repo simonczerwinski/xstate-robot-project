@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function useHover() {
+export const useHover = () => {
 	const [isHovered, setIsHovered] = useState(false);
 
 	const handleMouseEnter = () => {
@@ -16,6 +16,4 @@ function useHover() {
 		onMouseEnter: handleMouseEnter,
 		onMouseLeave: handleMouseLeave,
 	};
-}
-
-export default useHover;
+};

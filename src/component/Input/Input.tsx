@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDebounce } from '../../hooks/useDebounce';
 
 interface Props {
 	value?: string;
@@ -7,13 +8,17 @@ interface Props {
 }
 
 const Input: React.FC<Props> = ({ value, className, onChange }) => {
+	const [inputValue, setInputValue] = useState(value);
+	const debouncedValue = useDebounce(inputValue, 500);
+
+	const handleChange = (event: any) => {
+		setInputValue(event.target.value);
+		onChange(debouncedValue);
+	};
+
 	return (
 		<div>
-			<input
-				className={className}
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-			/>
+			<input className={className} value={inputValue} onChange={handleChange} />
 		</div>
 	);
 };
