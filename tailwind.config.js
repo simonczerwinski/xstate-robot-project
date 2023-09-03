@@ -23,6 +23,12 @@ module.exports = {
 		'hover:text-white',
 		'hover:text-black',
 		'hover:text-blue-900',
+		'w-320',
+		'w-640',
+		'h-320',
+		'h-640',
+		'grid-cols-5',
+		'grid-rows-5',
 	],
 	theme: {
 		extend: {},

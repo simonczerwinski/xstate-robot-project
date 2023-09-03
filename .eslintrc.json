@@ -17,6 +17,7 @@
 	"rules": {
 		"react/jsx-key": "warn",
 		"react/no-unknown-property": "warn",
-		"@typescript-eslint/no-explicit-any": "off"
+		"@typescript-eslint/no-explicit-any": "off",
+		"no-mixed-spaces-and-tabs": 0
 	}
 }

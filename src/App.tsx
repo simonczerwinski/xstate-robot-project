@@ -1,34 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { ChangeEvent } from 'react';
-import './App.css';
+import clsx from 'clsx';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
 import { commandMachine } from './state-machines/command.machine';
+import { robotMachine } from './state-machines/robot.machine';
+import './App.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 import Container from './component/Container/Container';
 import MasterLayout from './layout/MasterLayout';
 import Text from './component/Text/Text';
 import Button from './component/Button/Button';
 import Footer from './component/Footer/Footer';
 import Input from './component/Input/Input';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Props {
 	roomType?: string;
 }
 
 const App: React.FC<Props> = ({ roomType = 'Square' }) => {
-	const [state, send] = useMachine(commandMachine);
+	const [commandState, sendCommand] = useMachine(commandMachine);
+	const [robotState, sendRobot] = useMachine(robotMachine);
 	const [value, setValue] = useState('');
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value || '';
 		setValue(inputValue);
 	};
+	const handleReset = () => {
+		if (value !== '') {
+			sendCommand('RESET');
+			setValue('');
+		}
+	};
+	console.log('robotState', robotState.value);
 	useEffect(() => {
 		setTimeout(() => {
-			send('LOAD');
+			sendCommand('LOAD');
 		}, 500);
-	}, [send]);
+	}, [sendCommand, sendRobot]);
 
 	return (
 		<MasterLayout>
@@ -93,8 +103,7 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 						className="flex flex-col items-center"
 						onSubmit={(e) => {
 							e.preventDefault();
-							console.log('value', value);
-							send({ type: 'SUBMIT', value: value });
+							sendCommand({ type: 'SUBMIT', value: value });
 						}}
 					>
 						<label className="text-white font-medium font-semibold mb-2">
@@ -102,14 +111,17 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 						</label>
 						<div className="flex flex-row justify-items-center">
 							<input
-								className={'h-10 mr-2 p-2 font-normal rounded'}
+								className={clsx('h-10 mr-2 p-2 font-normal rounded', {
+									'border-2 border-red-500': commandState.context.showError,
+									'border-2 border-green-500': commandState.context.showSuccess,
+								})}
 								placeholder="eg: VGHGV"
 								onChange={handleChange}
 								value={value}
 							/>
 
 							<Button
-								className="font-bold py-2 px-4 rounded mb-10"
+								className="font-bold py-2 px-4 rounded mb-10 mr-2"
 								type="submit"
 								colors={{
 									background: 'blue-900',
@@ -118,7 +130,7 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 									hoverText: 'blue-100',
 								}}
 							>
-								{state.matches('loading') ? (
+								{commandState.matches('loading') ? (
 									<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
 										<Skeleton circle width={20} height={20} />
 									</SkeletonTheme>
@@ -130,10 +142,32 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 									/>
 								)}
 							</Button>
+							<Button
+								className="font-bold py-2 px-4 rounded mb-10"
+								type="button"
+								colors={{
+									background: 'blue-900',
+									text: 'white',
+									hoverBackground: 'blue-600',
+									hoverText: 'blue-100',
+								}}
+								onClick={() => {
+									console.log('reset');
+									handleReset();
+								}}
+							>
+								{robotState.matches('resetting') ? (
+									<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
+										<Skeleton circle width={20} height={20} />
+									</SkeletonTheme>
+								) : (
+									<Text text="Retry" as="span" className="text-m font-medium" />
+								)}
+							</Button>
 						</div>
 					</form>
 				</div>
-				<div className="flex flex-row items-center pb-10">
+				{/* <div className="flex flex-row items-center pb-10">
 					{state.context.showSuccess && (
 						<Text
 							text="Success"
@@ -148,11 +182,13 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 							className="text-m font-medium text-white"
 						/>
 					)}
-				</div>
+				</div> */}
 				<Container
 					className={'p-8 flex'}
 					room={roomType}
-					inputValue={state.context.inputValue}
+					inputValue={commandState.context.inputValue || ''}
+					successMessage={commandState.context.showSuccess}
+					errorMessage={commandState.context.showError}
 				/>
 			</main>
 			<Footer />

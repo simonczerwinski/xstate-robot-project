@@ -5,15 +5,21 @@ interface Props {
 	room?: string;
 	inputValue?: string;
 	className?: string;
+	successMessage?: boolean;
+	errorMessage?: boolean;
 }
 
-const Container: React.FC<Props> = ({ room, inputValue, className }) => {
+const Container: React.FC<Props> = ({
+	room,
+	inputValue,
+	className,
+	successMessage,
+}) => {
 	return (
 		<div className={className}>
+			{/* <div>{successMessage ? 'Success' : ''}</div> */}
 			{room === 'Square' ? (
-				<div className="w-80 h-80 flex justify-center items-center">
-					<SquareRoom input={inputValue} />
-				</div>
+				<SquareRoom input={inputValue} />
 			) : (
 				<div className="w-80 h-80 flex justify-center items-center">
 					<div className="w-60 h-60 bg-red-500 rounded-full">Circle</div>

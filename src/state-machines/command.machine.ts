@@ -1,13 +1,13 @@
 import { createMachine, assign } from 'xstate';
 
-interface CommandEvent {
+interface CommandContext {
 	type: string;
 	value?: string;
 }
 
 export const commandMachine = createMachine<
 	{ inputValue: string; showSuccess: boolean; showError: boolean },
-	CommandEvent
+	CommandContext
 >(
 	{
 		id: 'commandMachine',
@@ -21,6 +21,7 @@ export const commandMachine = createMachine<
 			idle: {
 				on: {
 					SUBMIT: 'loading',
+					RESET: 'reset',
 				},
 			},
 
@@ -43,6 +44,17 @@ export const commandMachine = createMachine<
 					},
 				},
 			},
+			reset: {
+				entry: assign({
+					inputValue: '',
+					showSuccess: false,
+					showError: false,
+				}),
+				after: {
+					100: 'idle',
+				},
+			},
+
 			success: {
 				after: {
 					100: 'idle',
@@ -84,7 +96,7 @@ export const commandMachine = createMachine<
 							resolve(event.value);
 						} else {
 							console.error('Error: Invalid input value');
-							reject('error');
+							resolve('');
 						}
 					}, 500);
 				});
