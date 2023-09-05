@@ -1,13 +1,13 @@
 import React from 'react';
 import SquareRoom from '../SquareRoom/SquareRoom';
 
-interface Props {
+type Props = {
 	room?: string;
 	inputValue?: string;
 	className?: string;
 	successMessage?: boolean;
 	errorMessage?: boolean;
-}
+};
 
 const Container: React.FC<Props> = ({
 	room,

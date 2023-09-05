@@ -33,7 +33,7 @@ export const robotMachine = createMachine<RobotContext>(
 		context: {
 			x: 0,
 			y: 0,
-			direction: '',
+			direction: 'S: SOUTH',
 			completedMoves: 0,
 			totalMoves: 0,
 			showSuccess: false,

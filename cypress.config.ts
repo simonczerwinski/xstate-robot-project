@@ -1,5 +1,6 @@
 export default {
 	e2e: {
+		baseUrl: 'https://localhost:3000',
 		chromeWebSecurity: false,
 		viewportWidth: 1280,
 		viewportHeight: 800,

@@ -33,7 +33,13 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 			setValue('');
 		}
 	};
-	console.log('robotState', robotState.value);
+
+	const handleRegisterName = (e) => {
+		e.preventDefault();
+		const name = e.target.value;
+		console.log('name', name);
+	};
+
 	useEffect(() => {
 		setTimeout(() => {
 			sendCommand('LOAD');
@@ -58,7 +64,11 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 				</Button>
 			</header>
 			<main className="flex flex-col w-full justify-center items-center">
-				<input type="text" placeholder="Enter your name" />
+				<input
+					type="text"
+					placeholder="Enter your name"
+					onChange={handleRegisterName}
+				/>
 				<Text
 					text="Welcome to my Robot Project"
 					as="h1"
@@ -186,7 +196,7 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 				<Container
 					className={'p-8 flex'}
 					room={roomType}
-					inputValue={commandState.context.inputValue || ''}
+					inputValue={commandState.context.inputValue}
 					successMessage={commandState.context.showSuccess}
 					errorMessage={commandState.context.showError}
 				/>

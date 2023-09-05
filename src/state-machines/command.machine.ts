@@ -22,6 +22,7 @@ export const commandMachine = createMachine<
 				on: {
 					SUBMIT: 'loading',
 					RESET: 'reset',
+					ERROR: 'error',
 				},
 			},
 
@@ -37,7 +38,7 @@ export const commandMachine = createMachine<
 						}),
 					},
 					onError: {
-						target: 'fail',
+						target: 'error',
 						actions: (e) => {
 							console.error('error', e);
 						},
@@ -61,9 +62,9 @@ export const commandMachine = createMachine<
 				},
 				entry: 'success',
 			},
-			fail: {
+			error: {
 				after: {
-					500: 'idle',
+					100: 'idle',
 				},
 				entry: 'error',
 			},
@@ -96,7 +97,7 @@ export const commandMachine = createMachine<
 							resolve(event.value);
 						} else {
 							console.error('Error: Invalid input value');
-							resolve('');
+							reject({ type: 'ERROR' });
 						}
 					}, 500);
 				});
