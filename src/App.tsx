@@ -5,6 +5,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
 import { commandMachine } from './state-machines/command.machine';
 import { robotMachine } from './state-machines/robot.machine';
+import { stepMachine } from './state-machines/step.machine';
 import './App.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Container from './component/Container/Container';
@@ -12,7 +13,7 @@ import MasterLayout from './layout/MasterLayout';
 import Text from './component/Text/Text';
 import Button from './component/Button/Button';
 import Footer from './component/Footer/Footer';
-import Input from './component/Input/Input';
+import Step from './component/Step/Step';
 
 interface Props {
 	roomType?: string;
@@ -20,8 +21,11 @@ interface Props {
 
 const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 	const [commandState, sendCommand] = useMachine(commandMachine);
+	const [stepState, sendStep] = useMachine(stepMachine);
 	const [robotState, sendRobot] = useMachine(robotMachine);
+
 	const [value, setValue] = useState('');
+	const [activeStep, setActiveStep] = useState(0);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value || '';
@@ -40,6 +44,9 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 		console.log('name', name);
 	};
 
+	const handleNext = () => {
+		sendStep('NEXT');
+	};
 	useEffect(() => {
 		setTimeout(() => {
 			sendCommand('LOAD');
@@ -64,25 +71,42 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 				</Button>
 			</header>
 			<main className="flex flex-col w-full justify-center items-center">
-				<input
-					type="text"
-					placeholder="Enter your name"
-					onChange={handleRegisterName}
-				/>
 				<Text
-					text="Welcome to my Robot Project"
+					text="Welcome to my Robot Project!"
 					as="h1"
-					className="text-2xl font-bold text-white"
+					className="text-2xl font-bold text-white py-8"
 				/>
-
-				<div className="flex flex-col items-center justify-center pb-8">
-					<div className="py-4 flex items-center m-10">
-						<Text
-							text="Please choose a room layout"
-							as="h1"
-							className="text-white font-medium font-semibold mb-4"
-						/>
+				{/* Step 1 */}
+				<Step
+					title="Choose a language"
+					loading={stepState.matches('loading')}
+					onNext={handleNext}
+				>
+					<div className="flex flex-row justify-between">
+						<select className="h-10 mr-2 p-2 font-normal rounded">
+							<option value="en">English</option>
+							<option value="se">Swedish</option>
+						</select>
 					</div>
+				</Step>
+				{/* Step 2 */}
+				<Step
+					title="To get started, you need to add a name:"
+					loading={stepState.matches('loading')}
+					onNext={handleNext}
+				>
+					<input
+						type="text"
+						className="h-10 mr-2 p-2 font-normal rounded"
+						placeholder="Enter your name"
+					/>
+				</Step>
+				{/* Step 3 */}
+				<Step
+					title="Please choose a room layout"
+					loading={stepState.matches('loading')}
+					onNext={handleNext}
+				>
 					<div className="flex flex-row w-full justify-between">
 						<Button
 							className="w-20 h-20 font-bold py-2 px-4 rounded mb-2"
@@ -107,8 +131,9 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 							<Text text="Circle" as="span" className="text-m font-medium" />
 						</Button>
 					</div>
-				</div>
-				<div className="flex flex-row items-center">
+				</Step>
+				{/* Step 4 */}
+				<Step title="Enter your command" loading={stepState.matches('loading')}>
 					<form
 						className="flex flex-col items-center"
 						onSubmit={(e) => {
@@ -117,7 +142,11 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 						}}
 					>
 						<label className="text-white font-medium font-semibold mb-2">
-							<Text text="Enter your command" as="span" />
+							<Text
+								text="Step 4: Enter your command"
+								as="h3"
+								className="text-lg font-bold text-white mb-4"
+							/>
 						</label>
 						<div className="flex flex-row justify-items-center">
 							<input
@@ -140,66 +169,61 @@ const App: React.FC<Props> = ({ roomType = 'Square' }) => {
 									hoverText: 'blue-100',
 								}}
 							>
-								{commandState.matches('loading') ? (
-									<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
-										<Skeleton circle width={20} height={20} />
-									</SkeletonTheme>
-								) : (
-									<Text
-										text="Submit"
-										as="span"
-										className="text-m font-medium"
-									/>
-								)}
-							</Button>
-							<Button
-								className="font-bold py-2 px-4 rounded mb-10"
-								type="button"
-								colors={{
-									background: 'blue-900',
-									text: 'white',
-									hoverBackground: 'blue-600',
-									hoverText: 'blue-100',
-								}}
-								onClick={() => {
-									console.log('reset');
-									handleReset();
-								}}
-							>
-								{robotState.matches('resetting') ? (
-									<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
-										<Skeleton circle width={20} height={20} />
-									</SkeletonTheme>
-								) : (
-									<Text text="Retry" as="span" className="text-m font-medium" />
-								)}
+								<Text text="Submit" as="span" className="text-m font-medium" />
 							</Button>
 						</div>
 					</form>
-				</div>
-				{/* <div className="flex flex-row items-center pb-10">
-					{state.context.showSuccess && (
-						<Text
-							text="Success"
-							as="span"
-							className="text-m font-medium text-white"
-						/>
-					)}
-					{state.context.showError && (
-						<Text
-							text="Error"
-							as="span"
-							className="text-m font-medium text-white"
-						/>
-					)}
-				</div> */}
-				<Container
-					className={'p-8 flex'}
-					room={roomType}
-					inputValue={commandState.context.inputValue}
-					successMessage={commandState.context.showSuccess}
-					errorMessage={commandState.context.showError}
-				/>
+					<Container
+						className={'p-8 flex'}
+						room={roomType}
+						inputValue={commandState.context.inputValue || ''}
+						successMessage={commandState.context.showSuccess}
+						errorMessage={commandState.context.showError}
+					/>
+				</Step>
+
+				{/* Step 5 - Modal here*/}
+				<Step
+					className={'pt-10'}
+					title="Save result"
+					loading={stepState.matches('loading')}
+				>
+					<Button
+						className="font-bold py-2 px-4 rounded mb-10 mr-2"
+						type="submit"
+						colors={{
+							background: 'blue-900',
+							text: 'white',
+							hoverBackground: 'blue-600',
+							hoverText: 'blue-100',
+						}}
+					>
+						<Text text="Save" as="span" className="text-m font-medium" />
+					</Button>
+
+					<Button
+						className="font-bold py-2 px-4 rounded mb-10"
+						type="button"
+						colors={{
+							background: 'blue-900',
+							text: 'white',
+							hoverBackground: 'blue-600',
+							hoverText: 'blue-100',
+						}}
+						onClick={() => {
+							console.log('reset');
+							handleReset();
+						}}
+					>
+						{robotState.matches('resetting') ? (
+							<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
+								<Skeleton circle width={20} height={20} />
+							</SkeletonTheme>
+						) : (
+							<Text text="Retry" as="span" className="text-m font-medium" />
+						)}
+					</Button>
+				</Step>
 			</main>
 			<Footer />
 		</MasterLayout>
