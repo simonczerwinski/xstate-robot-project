@@ -33,7 +33,7 @@ const Step: React.FC<StepProps> = ({
 		<>
 			<CSSTransition
 				in={true}
-				apear={true}
+				appear={true}
 				nodeRef={nodeRef}
 				timeout={500}
 				classNames={

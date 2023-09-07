@@ -63,8 +63,8 @@ const App: React.FC = () => {
 			case 'language':
 				return (
 					<Step
-						animationDirection={stepState.context.animationDirection}
 						title="Choose a language"
+						animationDirection={stepState.context.animationDirection}
 						onNext={() => handleStepChange('next')}
 					>
 						<div className="flex flex-row justify-between">
@@ -78,8 +78,8 @@ const App: React.FC = () => {
 			case 'name':
 				return (
 					<Step
-						animationDirection={stepState.context.animationDirection}
 						title="To get started, you need to add a name:"
+						animationDirection={stepState.context.animationDirection}
 						onPrevious={() => handleStepChange('prev')}
 						onNext={() => handleStepChange('next')}
 					>
@@ -94,8 +94,8 @@ const App: React.FC = () => {
 			case 'layout':
 				return (
 					<Step
-						animationDirection={stepState.context.animationDirection}
 						title="Please choose a room layout"
+						animationDirection={stepState.context.animationDirection}
 						onPrevious={() => handleStepChange('prev')}
 						onNext={() => handleStepChange('next')}
 					>
@@ -114,10 +114,10 @@ const App: React.FC = () => {
 			case 'command':
 				return (
 					<Step
-						animationDirection={stepState.context.animationDirection}
 						title="Enter your command"
+						animationDirection={stepState.context.animationDirection}
 						onPrevious={() => handleStepChange('prev')}
-						onNext={() => handleStepChange('next')}
+						onSave={() => handleStepChange('next')}
 						isRobotFinished={commandState.context.showSuccess}
 					>
 						<div className="flex flex-col items-center">

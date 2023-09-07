@@ -16,7 +16,7 @@ This project is built using the following technologies:
 
 - **Frontend**: I use HTML, CSS (Tailwind CSS), and the JavaScript library React.
 
-- **Styling**: Tailwind CSS 3.3
+- **Styling**: Tailwind CSS 3.3.3
 
 - **State Management**: XState helps me manage complex UI state transitions. It provides a clear way to represent and handle different states in my applications.
 
@@ -100,7 +100,7 @@ npx cypress open
 I hope you enjoy my project. If you have any questions or feedback, feel free to reach out to me:
 
 - Email: [simon@czerwinski.se](mailto:simon@czerwinski.se)
-- LinkedIn: [Simon Czerwinski](https://www.linkedin.com/in/simonczerwinski)
+- LinkedIn: [Simon Czerwinski](https://www.linkedin.com/in/simon-edward-czerwinski-b0b9297a/)
 - Portfolio Website: [simonczerwinski.com](https://www.simonczerwinski.com)
 
 ---
