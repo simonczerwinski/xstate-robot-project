@@ -2,7 +2,7 @@ import React from 'react';
 
 export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface Props {
+type Props = {
 	children: React.ReactNode;
 	size?: ButtonSize;
 	className?: string;
@@ -14,7 +14,7 @@ interface Props {
 	};
 	type?: 'button' | 'submit' | 'reset';
 	onClick?: () => void;
-}
+};
 
 const Button: React.FC<Props> = ({
 	children,

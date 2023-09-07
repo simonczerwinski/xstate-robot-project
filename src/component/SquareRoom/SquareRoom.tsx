@@ -40,6 +40,7 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 		const handleCommands = async () => {
 			if (getCommands && getCommands.length > 0) {
 				for (const command of getCommands) {
+					// Swedish commands
 					if (['G', 'H', 'V'].includes(command)) {
 						switch (command) {
 							case 'G':
@@ -53,6 +54,30 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 								sendRobot('TURN_RIGHT');
 								break;
 							case 'V':
+								// left
+								console.log('TURN_LEFT');
+								sendRobot('TURN_LEFT');
+								break;
+							default:
+								break;
+						}
+						// Delay movement for smoother animation
+						await new Promise((resolve) => setTimeout(resolve, 500));
+					}
+					// English commands
+					else if (['F', 'R', 'L'].includes(command)) {
+						switch (command) {
+							case 'F':
+								// forward
+								console.log('MOVE_FORWARD');
+								sendRobot('MOVE_FORWARD');
+								break;
+							case 'R':
+								// right
+								console.log('TURN_RIGHT');
+								sendRobot('TURN_RIGHT');
+								break;
+							case 'L':
 								// left
 								console.log('TURN_LEFT');
 								sendRobot('TURN_LEFT');

@@ -39,6 +39,7 @@ export const robotMachine = createMachine<RobotContext>(
 			showSuccess: false,
 		},
 		states: {
+			// Set initial state and position of the robot
 			init: {
 				entry: assign({
 					x: 25,
@@ -81,7 +82,7 @@ export const robotMachine = createMachine<RobotContext>(
 					onDone: [
 						{
 							target: 'checkMoves',
-							actions: ['incrementCompletedMoves', 'checkAllMovesCompleted'],
+							// actions: ['incrementCompletedMoves'],
 						},
 					],
 					onError: {
@@ -99,7 +100,6 @@ export const robotMachine = createMachine<RobotContext>(
 					onDone: [
 						{
 							target: 'backToInit',
-							actions: ['incrementCompletedMoves', 'checkAllMovesCompleted'],
 						},
 					],
 					onError: {
@@ -115,14 +115,15 @@ export const robotMachine = createMachine<RobotContext>(
 				always: [
 					{
 						target: 'success',
-						cond: 'checkAllMovesCompleted',
+						// cond: 'checkAllMovesCompleted',
 					},
-					// Target success if all moves are completed
-					{
-						target: 'idle',
-					},
+					// Transition back to 'move' if not all moves are completed
+					// {
+					// 	target: 'move',
+					// },
 				],
 			},
+			// Transition back to 'idle' after reset
 			backToInit: {
 				after: {
 					100: 'idle',
@@ -132,7 +133,7 @@ export const robotMachine = createMachine<RobotContext>(
 			// Show success message
 			success: {
 				after: {
-					100: 'idle',
+					300: 'idle',
 				},
 				entry: 'finish',
 			},
@@ -144,17 +145,17 @@ export const robotMachine = createMachine<RobotContext>(
 			moveForward: assign({
 				y: (context) => context.y - 10,
 				direction: 'N: NORTH',
-				totalMoves: (context) => context.totalMoves + 1,
+				// totalMoves: (context) => context.totalMoves + 1,
 			}),
 			turnRight: assign({
 				x: (context) => context.x + 10,
 				direction: 'Ö: EAST',
-				totalMoves: (context) => context.totalMoves + 1,
+				// totalMoves: (context) => context.totalMoves + 1,
 			}),
 			turnLeft: assign({
 				x: (context) => context.x - 10,
 				direction: 'V: WEST',
-				totalMoves: (context) => context.totalMoves + 1,
+				// totalMoves: (context) => context.totalMoves + 1,
 			}),
 			resetRobot: assign({
 				x: 25,
@@ -167,9 +168,9 @@ export const robotMachine = createMachine<RobotContext>(
 			finish: assign({
 				showSuccess: true,
 			}),
-			incrementCompletedMoves: assign({
-				completedMoves: (context) => context.completedMoves + 1,
-			}),
+			// incrementCompletedMoves: assign({
+			// 	completedMoves: (context) => context.completedMoves + 1,
+			// }),
 		},
 		// Handle the state (move) transition and update next move with delay of 100ms
 		services: {
@@ -198,10 +199,10 @@ export const robotMachine = createMachine<RobotContext>(
 		},
 
 		// Condition: Check if all moves are completed
-		guards: {
-			checkAllMovesCompleted: (context) => {
-				return context.completedMoves === context.totalMoves;
-			},
-		},
+		// guards: {
+		// 	checkAllMovesCompleted: (context) => {
+		// 		return context.completedMoves === context.totalMoves;
+		// 	},
+		// },
 	}
 );

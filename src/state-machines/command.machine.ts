@@ -18,6 +18,7 @@ export const commandMachine = createMachine<
 			showError: false,
 		},
 		states: {
+			// Set tranistion states for input value
 			idle: {
 				on: {
 					SUBMIT: 'loading',
@@ -45,6 +46,7 @@ export const commandMachine = createMachine<
 					},
 				},
 			},
+			// Reset the input value
 			reset: {
 				entry: assign({
 					inputValue: '',
@@ -55,7 +57,7 @@ export const commandMachine = createMachine<
 					100: 'idle',
 				},
 			},
-
+			// Show success or error message
 			success: {
 				after: {
 					100: 'idle',
@@ -87,13 +89,15 @@ export const commandMachine = createMachine<
 			}),
 		},
 
-		// Handle input value
+		// Handle input value and error handling
 		services: {
 			setInputValue: (context, event) => {
 				return new Promise((resolve, reject) => {
 					setTimeout(() => {
 						const input = event?.value?.toLocaleUpperCase().split('');
 						if (input?.some((char) => ['G', 'V', 'H'].includes(char))) {
+							resolve(event.value);
+						} else if (input?.some((char) => ['F', 'R', 'L'].includes(char))) {
 							resolve(event.value);
 						} else {
 							console.error('Error: Invalid input value');

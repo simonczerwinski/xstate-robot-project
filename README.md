@@ -1,46 +1,108 @@
-# Getting Started with Create React App
+# Welcome to My Robot Project - By Simon Czerwinski
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hello there! 👋 I'm Simon Czerwinski. This is my Robot project where I showcase some of my skills as a frontend developer with full-stack experience.
 
-## Available Scripts
+## About Me
 
-In the project directory, you can run:
+I'm a frontend developer based in Halmstad, Sweden. My journey in web development started in the middle of my senior high school in the year 2011. I started my first job in January 2015. I've had the pleasure of working on a variety of projects that have honed my skills in both frontend and backend technologies.
 
-### `npm start`
+## What You'll Find Here
 
-Runs the app in the development mode.\
+This repository serves as a small robot that takes commands from an input (e.g., F = Forward, R = Right, and L = Left). It can also take commands in Swedish (e.g., G = Gå (Go), H = Höger (Right), and V = Vänster (Left)). An example of an input in Swedish can be "GHHHVGGGVV".
+
+## Technologies
+
+This project is built using the following technologies:
+
+- **Frontend**: I use HTML, CSS (Tailwind CSS), and the JavaScript library React.
+
+- **Styling**: Tailwind CSS 3.3
+
+- **State Management**: XState helps me manage complex UI state transitions. It provides a clear way to represent and handle different states in my applications.
+
+- **Backend**: I work with Node.js for backend development, building APIs to support my frontend applications.
+
+- **Database**: MongoDB to save input history.
+
+## Getting Started
+
+To start this project locally, follow this guide:
+
+Install all dependencies and packages.
+
+```bash
+npm install
+```
+
+After the installation is done, make sure you are in the project directory, then run:
+
+```bash
+npm start
+```
+
+This runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+To run tests, use:
+
+```bash
+npm test
+```
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+To build the app for production to the build folder, use:
 
-Builds the app for production to the `build` folder.\
+```bash
+npm run build
+```
+
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The build is minified and the filenames include the hashes.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run Cypress tests, make sure the app is running by starting it with:
 
-### `npm run eject`
+```bash
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Then, open a new terminal and run the following script:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run cypress:open
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+or
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```bash
+npx cypress open
+```
 
-## Learn More
+## Future Goals
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Login**: I plan to add a login system.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Api**: Improve the API handler and mocking.
+
+- **More layouts**: I will create more layouts for the robot to choose from.
+
+- **Navbar**: Implement a menu with pages..
+
+- **Zustand**: Maybe implement Zustand to test new stuff.
+
+## Enjoy
+
+I hope you enjoy my project. If you have any questions or feedback, feel free to reach out to me:
+
+- Email: [simon@czerwinski.se](mailto:simon@czerwinski.se)
+- LinkedIn: [Simon Czerwinski](https://www.linkedin.com/in/simonczerwinski)
+- Portfolio Website: [simonczerwinski.com](https://www.simonczerwinski.com)
+
+---
+
+Thank you!
