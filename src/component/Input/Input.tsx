@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
-import { useDebounce } from '../../hooks/useDebounce';
+import { ChangeEvent } from 'react';
+
+// TODO: Show suggestions/ results when typing using debouncing
 
 interface Props {
 	value?: string;
 	className?: string;
+	placeHolder?: string;
 	onChange: (value: string) => void;
 }
 
-const Input: React.FC<Props> = ({ value, className, onChange }) => {
+const Input: React.FC<Props> = ({
+	value,
+	placeHolder,
+	className,
+	onChange,
+}) => {
 	const [inputValue, setInputValue] = useState(value);
-	const debouncedValue = useDebounce(inputValue, 500);
 
-	const handleChange = (event: any) => {
-		setInputValue(event.target.value);
-		onChange(debouncedValue);
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const inputValue = e.target.value || '';
+		setInputValue(inputValue);
+		onChange(inputValue);
 	};
 
 	return (
 		<div>
-			<input className={className} value={inputValue} onChange={handleChange} />
+			<input
+				placeholder={placeHolder}
+				className={className}
+				value={inputValue}
+				onChange={handleChange}
+			/>
 		</div>
 	);
 };

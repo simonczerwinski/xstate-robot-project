@@ -19,7 +19,8 @@ const Container: React.FC<Props> = ({
 		<div className={className}>
 			{/* <div>{successMessage ? 'Success' : ''}</div> */}
 			{room === 'Square' ? (
-				<SquareRoom input={inputValue} />
+				// <SquareRoom input={inputValue} />
+				<div>Square</div>
 			) : (
 				<div className="w-80 h-80 flex justify-center items-center">
 					<div className="w-60 h-60 bg-red-500 rounded-full">Circle</div>

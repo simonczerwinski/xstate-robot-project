@@ -95,9 +95,11 @@ export const commandMachine = createMachine<
 				return new Promise((resolve, reject) => {
 					setTimeout(() => {
 						const input = event?.value?.toLocaleUpperCase().split('');
-						if (input?.some((char) => ['G', 'V', 'H'].includes(char))) {
-							resolve(event.value);
-						} else if (input?.some((char) => ['F', 'R', 'L'].includes(char))) {
+						if (
+							input?.every((char) =>
+								['G', 'V', 'H', 'F', 'R', 'L'].includes(char)
+							)
+						) {
 							resolve(event.value);
 						} else {
 							console.error('Error: Invalid input value');

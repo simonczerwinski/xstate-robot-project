@@ -7,11 +7,21 @@ interface Props {
 	id?: string;
 	x?: number;
 	y?: number;
-	direction?: number;
+	directionText?: string;
+	directionRotate?: number;
 	animation?: React.CSSProperties;
+	finished?: boolean;
 }
 
-const Robot: React.FC<Props> = ({ id, direction, animation }) => {
+const Robot: React.FC<Props> = ({
+	id,
+	x,
+	y,
+	directionText,
+	directionRotate,
+	animation,
+	finished,
+}) => {
 	const { isHovered, onMouseEnter, onMouseLeave } = useHover();
 	const scale = isHovered ? 1.2 : 1;
 	const scaleAnimation = {
@@ -19,14 +29,14 @@ const Robot: React.FC<Props> = ({ id, direction, animation }) => {
 		transition: 'transform 0.3s ease',
 	};
 	const directionAnimation = {
-		transform: `rotate(${direction}deg)`,
+		transform: `rotate(${directionRotate}deg)`,
 		transition: 'transform 0.3s ease',
 	};
 	return (
 		<div
 			id={id}
 			className={clsx(
-				'absolute w-10 h-10 bg-green-600 rounded-full cursor-pointer',
+				'absolute flex justify-center w-10 h-10 bg-teal-600 bg-opacity-80 animate-pulse rounded-full cursor-pointer',
 				style
 			)}
 			style={{
@@ -40,10 +50,23 @@ const Robot: React.FC<Props> = ({ id, direction, animation }) => {
 					...scaleAnimation,
 					...directionAnimation,
 				}}
-				className="p-2"
+				className="p-1 w-8"
 				src={'/images/robot-solid.svg'}
 				alt="Robot Icon"
 			/>
+			{finished && (
+				<>
+					<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
+						<div className="w-9 h-9 bg-green-600 rounded-full animate-pulse"></div>
+					</div>
+					<div className="absolute top-[-1rem] bg-green-600 left-0 w-full h-full flex flex-row justify-center items-center rounded-md z-1 p-1">
+						<p>
+							{x},{y}{' '}
+						</p>{' '}
+						<p>{directionText}</p>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
