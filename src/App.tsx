@@ -23,6 +23,15 @@ const App: React.FC = () => {
 
 	const [value, setValue] = useState('');
 
+	const handleRegisterName = (e) => {
+		e.preventDefault();
+		const name = e.target.value;
+		console.log('name', name);
+	};
+	const handleRoomType = (e) => {
+		const roomType = e.target.value || '';
+		setRoomType(roomType);
+	};
 	const handleCommand = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value || '';
 		setValue(inputValue);
@@ -33,20 +42,11 @@ const App: React.FC = () => {
 			setValue('');
 		}
 	};
-	const handleRoomType = (e) => {
-		const roomType = e.target.value || '';
-		setRoomType(roomType);
-	};
-
-	const handleRegisterName = (e) => {
-		e.preventDefault();
-		const name = e.target.value;
-		console.log('name', name);
-	};
 	const handleSave = () => {
 		sendStep({ type: 'SUBMIT' });
 		//save to db
 	};
+
 	const handleStepChange = (step: string) => {
 		sendStep({ type: step === 'next' ? 'NEXT' : 'PREVIOUS' });
 	};
@@ -136,10 +136,7 @@ const App: React.FC = () => {
 											commandState.context.showSuccess,
 									})}
 									placeholder="eg: VGHGV"
-									onChange={
-										// Disable after succeeded submit
-										handleCommand
-									}
+									onChange={handleCommand}
 									value={value}
 								/>
 
@@ -147,8 +144,9 @@ const App: React.FC = () => {
 									className="font-bold py-2 px-4 rounded mb-10 mr-2"
 									type="button"
 									onClick={() => {
-										// Disable after succeeded submit
-										sendCommand({ type: 'SUBMIT', value: value });
+										if (value !== '') {
+											sendCommand({ type: 'SUBMIT', value: value });
+										}
 									}}
 									colors={{
 										background: 'blue-900',

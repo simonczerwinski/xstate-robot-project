@@ -14,7 +14,7 @@ type Props = {
 const gridWidth = 5;
 const gridHeight = 5;
 const gridSize = 320;
-const cellSize = gridSize / gridWidth;
+const cellSize = gridSize / (gridWidth + gridHeight);
 
 const Wall: React.FC<Props> = ({ children }) => {
 	return (
@@ -32,9 +32,6 @@ const Wall: React.FC<Props> = ({ children }) => {
 const SquareRoom: React.FC<Props> = ({ input }) => {
 	const [robotState, sendRobot] = useMachine(robotMachine);
 	const getCommands = input?.toLocaleUpperCase().split('');
-	const x = robotState.context.x;
-	const y = robotState.context.y;
-	const direction = robotState.context.direction;
 
 	useEffect(() => {
 		const handleCommands = async () => {
@@ -44,18 +41,12 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 					if (['G', 'H', 'V'].includes(command)) {
 						switch (command) {
 							case 'G':
-								// forward
-								console.log('MOVE_FORWARD');
 								sendRobot('MOVE_FORWARD');
 								break;
 							case 'H':
-								// right
-								console.log('TURN_RIGHT');
 								sendRobot('TURN_RIGHT');
 								break;
 							case 'V':
-								// left
-								console.log('TURN_LEFT');
 								sendRobot('TURN_LEFT');
 								break;
 							default:
@@ -68,18 +59,12 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 					else if (['F', 'R', 'L'].includes(command)) {
 						switch (command) {
 							case 'F':
-								// forward
-								console.log('MOVE_FORWARD');
 								sendRobot('MOVE_FORWARD');
 								break;
 							case 'R':
-								// right
-								console.log('TURN_RIGHT');
 								sendRobot('TURN_RIGHT');
 								break;
 							case 'L':
-								// left
-								console.log('TURN_LEFT');
 								sendRobot('TURN_LEFT');
 								break;
 							default:
@@ -99,9 +84,7 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 		handleCommands();
 	}, [input, sendRobot]);
 
-	// Calculate x and y positions based on the robot's current position
-	const xPosition = Math.max(0, Math.min(gridWidth, x / 10));
-	const yPosition = Math.max(0, Math.min(gridHeight, y / 10));
+	const { x, y, direction, directionRotate } = robotState.context;
 
 	return (
 		<Wall>
@@ -127,12 +110,10 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 						</div>
 						<Robot
 							id="robot"
-							x={x}
-							y={y}
-							direction={direction}
+							direction={directionRotate}
 							animation={{
-								top: `${yPosition * cellSize}px`,
-								left: `${xPosition * cellSize}px`,
+								top: `${y * cellSize}px`,
+								left: `${x * cellSize}px`,
 								transform: `translate(-50%, -50%)`,
 								transition: 'all 0.3s linear',
 							}}
@@ -140,7 +121,7 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 					</div>
 					{robotState.context.showSuccess && (
 						<div className="absolute bottom-2 left-2 text-white text-lg">
-							{Math.floor(x / 10)},{Math.floor(y / 10)} {direction}
+							{x},{y} {direction}
 						</div>
 					)}
 				</div>

@@ -1,27 +1,27 @@
-import React, { useEffect } from 'react';
-import { IModelRobot } from '../../models/robotModel';
+import React from 'react';
 import { useHover } from '../../hooks/useHover';
 import style from './Robot.module.css';
 import clsx from 'clsx';
 
 interface Props {
-	// robot?: IModelRobot;
 	id?: string;
 	x?: number;
 	y?: number;
-	direction?: string;
+	direction?: number;
 	animation?: React.CSSProperties;
 }
 
-const Robot: React.FC<Props> = ({ id, x, y, direction, animation }) => {
-	// const { x, y, direction } = robot || {};
+const Robot: React.FC<Props> = ({ id, direction, animation }) => {
 	const { isHovered, onMouseEnter, onMouseLeave } = useHover();
 	const scale = isHovered ? 1.2 : 1;
 	const scaleAnimation = {
 		transform: `scale(${scale})`,
 		transition: 'transform 0.3s ease',
 	};
-
+	const directionAnimation = {
+		transform: `rotate(${direction}deg)`,
+		transition: 'transform 0.3s ease',
+	};
 	return (
 		<div
 			id={id}
@@ -30,8 +30,6 @@ const Robot: React.FC<Props> = ({ id, x, y, direction, animation }) => {
 				style
 			)}
 			style={{
-				// gridColumn: `${x}`,
-				// gridRow: `${y}`,
 				...animation,
 			}}
 			onMouseEnter={onMouseEnter}
@@ -40,6 +38,7 @@ const Robot: React.FC<Props> = ({ id, x, y, direction, animation }) => {
 			<img
 				style={{
 					...scaleAnimation,
+					...directionAnimation,
 				}}
 				className="p-2"
 				src={'/images/robot-solid.svg'}
