@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useMachine } from '@xstate/react';
 import { robotMachine } from '../../state-machines/robot.machine';
-import Text from '../Text/Text';
 import Robot from '../Robot/Robot';
 import clsx from 'clsx';
-import style from './SquareRoom.module.css';
 import CommandInput from '../CommandInput';
+import CommandSave from '../CommandSave';
 
 type Props = {
 	SquareRoomResponse?: string;
 	children?: React.ReactNode;
 };
 
+const room = 'Square';
 const gridWidth = 5;
 const gridHeight = 5;
 const gridSize = 400;
@@ -48,7 +48,10 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 		setInputValue('');
 		setPrevInputValue('');
 	};
-
+	const handleSave = (name: string) => {
+		// Handle saving the name input here
+		console.log('Saving:', name);
+	};
 	const getCommands = inputValue?.toLocaleUpperCase().split('');
 
 	useEffect(() => {
@@ -84,7 +87,7 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 	const { x, y, direction, directionRotate } = robotState.context;
 
 	return (
-		<div>
+		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-30 rounded-md p-8">
 			<Wall>
 				<div className="w-[200px] h-[200px] flex justify-center items-center z-0">
 					<div className="relative flex flex-col w-full h-full">
@@ -92,28 +95,6 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 							id="squareroom"
 							className={clsx('w-full h-full bg-black text-white rounded')}
 						>
-							{/* <div>
-								<div className="absolute top-[-4rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
-									<Text
-										text="North"
-										as="span"
-										className="text-xl font-normal"
-									/>
-								</div>
-								<div className="absolute bottom-[-4rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
-									<Text
-										text="South"
-										as="span"
-										className="text-xl font-normal"
-									/>
-								</div>
-								<div className="absolute left-[-5rem] top-1/2 transform -translate-y-1/2 text-center text-xs flex justify-center items-center">
-									<Text text="West" as="span" className="text-xl font-normal" />
-								</div>
-								<div className="absolute right-[-5rem] top-1/2 transform -translate-y-1/2 text-center text-xs flex justify-center items-center">
-									<Text text="East" as="span" className="text-xl font-normal" />
-								</div>
-							</div> */}
 							<Robot
 								id="robot"
 								x={x}
@@ -129,16 +110,19 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 								}}
 							/>
 						</div>
-						{robotState.context.showSuccess && (
-							<div className="absolute bottom-2 left-2 text-white text-lg">
-								{x},{y} {direction}
-							</div>
-						)}
 					</div>
 				</div>
 			</Wall>
-
-			<CommandInput onSubmit={handleSubmit} onReset={handleReset} />
+			<div className="flex flex-col">
+				<CommandInput onSubmit={handleSubmit} onReset={handleReset} />
+				{robotState.context.showSuccess && (
+					<CommandSave
+						onSave={handleSave}
+						storeRoomType={room}
+						storeCommandInput={inputValue}
+					/>
+				)}
+			</div>
 		</div>
 	);
 };

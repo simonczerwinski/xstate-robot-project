@@ -20,29 +20,44 @@ const App: React.FC = () => {
 			name: 'Simon',
 			room: 'Square',
 			command: 'VGHGV',
-			language: 'English',
 			date: '2023-09-10',
 		},
 		{
 			name: 'Simon 2',
 			room: 'Circle',
 			command: 'ABCD',
-			language: 'Swedish',
 			date: '2023-09-10',
 		},
 	];
 
 	return (
 		<MasterLayout>
-			<header className="bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
+			<header className="relative w-full h-auto flex flex-col items-center justify-between p-40 lg:justify-center xl:px-0">
+				<video
+					autoPlay
+					loop
+					muted
+					className="absolute inset-0 w-full h-full object-cover"
+				>
+					<source
+						src="/videos/bg-video-nebula-1920x1080.mp4"
+						type="video/mp4"
+					/>
+				</video>
+				<div className="absolute inset-0 bg-black opacity-60"></div>
 				<Text
-					text="Welcome to Simons robot project!"
+					text="Welcome!"
 					as="h1"
-					className="text-2xl font-bold text-white py-8"
+					className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl m-text-xl font-bold text-white py-8 relative z-10"
+				/>
+				<Text
+					text="This is Simons robot project!"
+					as="h2"
+					className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl m-text-xl font-bold text-white py-8 relative z-10"
 				/>
 			</header>
-			<main className="flex flex-col w-full h-full p-10">
-				<div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center overflow-hidden mt-8 p-4 rounded-md transition-all">
+			<main className="flex flex-col w-full h-full pt-32 px-8 bg-gradient-to-b from-black to-indigo-950">
+				<div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center mt-8 p-4 rounded-md transition-all">
 					<SquareRoom SquareRoomResponse={squareRoomResult} />
 					{/* <div className="hidden lg:block w-1 bg-gray-300 h-full mx-4"></div> */}
 					<CircleRoom resCircleRoom={circleRoomResult} />

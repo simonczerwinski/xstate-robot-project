@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 export type ButtonSize = 'small' | 'medium' | 'large';
@@ -13,6 +14,7 @@ type Props = {
 		hoverText: string;
 	};
 	type?: 'button' | 'submit' | 'reset';
+	title?: string;
 	onClick?: () => void;
 };
 
@@ -20,6 +22,7 @@ const Button: React.FC<Props> = ({
 	children,
 	className,
 	colors,
+	title,
 	type,
 	onClick,
 }) => {
@@ -31,7 +34,15 @@ const Button: React.FC<Props> = ({
 	const styleClasses = `${baseStyle} ${hoverStyle} ${className}`;
 
 	return (
-		<button type={type} onClick={onClick} className={styleClasses}>
+		<button
+			title={title}
+			type={type}
+			onClick={onClick}
+			className={clsx(
+				styleClasses,
+				'flex justify-center items-center rounded-full'
+			)}
+		>
 			{children}
 		</button>
 	);

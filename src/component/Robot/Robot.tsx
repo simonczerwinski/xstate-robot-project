@@ -2,6 +2,7 @@ import React from 'react';
 import { useHover } from '../../hooks/useHover';
 import style from './Robot.module.css';
 import clsx from 'clsx';
+import Text from '../Text';
 
 interface Props {
 	id?: string;
@@ -36,7 +37,7 @@ const Robot: React.FC<Props> = ({
 		<div
 			id={id}
 			className={clsx(
-				'absolute flex justify-center w-10 h-10 bg-teal-600 bg-opacity-80 animate-pulse rounded-full cursor-pointer',
+				'absolute flex justify-center w-10 h-10 bg-teal-600 bg-opacity-80 animate-pulse rounded-full cursor-pointer z-10',
 				style
 			)}
 			style={{
@@ -59,11 +60,10 @@ const Robot: React.FC<Props> = ({
 					<div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
 						<div className="w-9 h-9 bg-green-600 rounded-full animate-pulse"></div>
 					</div>
-					<div className="absolute top-[-1rem] bg-green-600 left-0 w-full h-full flex flex-row justify-center items-center rounded-md z-1 p-1">
-						<p>
-							{x},{y}{' '}
-						</p>{' '}
-						<p>{directionText}</p>
+					<div className="absolute top-[-2rem] left-[-2rem] bg-green-600 w-28 flex flex-row justify-center items-center rounded-md p-1">
+						<span className="text-white text-sm font-medium pr-2">
+							{x},{y} {directionText}
+						</span>
 					</div>
 				</>
 			)}
