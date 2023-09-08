@@ -32,6 +32,7 @@ const Wall: React.FC<Props> = ({ children }) => {
 const SquareRoom: React.FC<Props> = ({ input }) => {
 	const [robotState, sendRobot] = useMachine(robotMachine);
 	const getCommands = input?.toLocaleUpperCase().split('');
+	const { x, y, direction, directionRotate } = robotState.context;
 
 	useEffect(() => {
 		const handleCommands = async () => {
@@ -76,6 +77,7 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 						console.error(`Bad command: ${command}`);
 					}
 				}
+				sendRobot({ type: 'FINISH' });
 			} else {
 				sendRobot({ type: 'RESET' });
 			}
@@ -83,8 +85,6 @@ const SquareRoom: React.FC<Props> = ({ input }) => {
 
 		handleCommands();
 	}, [input, sendRobot]);
-
-	const { x, y, direction, directionRotate } = robotState.context;
 
 	return (
 		<Wall>

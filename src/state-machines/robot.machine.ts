@@ -40,10 +40,6 @@ export const robotMachine = createMachine<RobotContext>(
 			// Set tranistion states for robot movement
 			idle: {
 				on: {
-					RERUN: {
-						target: 'resetting',
-						actions: 'resetRobot',
-					},
 					MOVE_FORWARD: {
 						target: 'move',
 						actions: 'moveForward',
@@ -56,22 +52,23 @@ export const robotMachine = createMachine<RobotContext>(
 						target: 'turn',
 						actions: 'turnLeft',
 					},
+					FINISH: {
+						target: 'success',
+						actions: 'finish',
+					},
 					RESET: {
 						target: 'resetting',
 						actions: 'resetRobot',
 					},
 				},
 			},
-
 			// Set the robot's movement
 			move: {
 				invoke: {
 					src: 'moving',
-					onDone: [
-						{
-							target: 'checkMoves',
-						},
-					],
+					onDone: {
+						target: 'idle',
+					},
 					onError: {
 						target: 'idle',
 						actions: (e) => {
@@ -83,11 +80,9 @@ export const robotMachine = createMachine<RobotContext>(
 			turn: {
 				invoke: {
 					src: 'turning',
-					onDone: [
-						{
-							target: 'checkMoves',
-						},
-					],
+					onDone: {
+						target: 'idle',
+					},
 					onError: {
 						target: 'idle',
 						actions: (e) => {
@@ -113,14 +108,6 @@ export const robotMachine = createMachine<RobotContext>(
 					},
 				},
 			},
-			// Check if the robot moves successfully
-			checkMoves: {
-				always: [
-					{
-						target: 'success',
-					},
-				],
-			},
 			// Transition back to 'idle' after reset
 			backToStart: {
 				after: {
@@ -133,7 +120,7 @@ export const robotMachine = createMachine<RobotContext>(
 				after: {
 					300: 'idle',
 				},
-				entry: 'finish',
+				type: 'final',
 			},
 		},
 	},

@@ -43,7 +43,10 @@ const Step: React.FC<StepProps> = ({
 			>
 				<div
 					ref={nodeRef}
-					className={clsx('flex flex-col items-center', className)}
+					className={clsx(
+						'flex flex-col items-center bg-black bg-opacity-30 p-10 rounded-md',
+						className
+					)}
 				>
 					<Text
 						text={title}

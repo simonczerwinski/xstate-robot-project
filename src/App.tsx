@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { ChangeEvent } from 'react';
-import clsx from 'clsx';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
 import { commandMachine } from './state-machines/command.machine';
 import { robotMachine } from './state-machines/robot.machine';
 import { stepMachine } from './state-machines/step.machine';
-import './App.css';
-import 'react-loading-skeleton/dist/skeleton.css';
+import clsx from 'clsx';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import Container from './component/Container/Container';
 import MasterLayout from './layout/MasterLayout';
 import Text from './component/Text/Text';
 import Button from './component/Button/Button';
 import Footer from './component/Footer/Footer';
 import Step from './component/Step/Step';
+import HistoryList from './component/HistoryList/HistoryList';
+import './App.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const App: React.FC = () => {
 	const [commandState, sendCommand] = useMachine(commandMachine);
@@ -39,6 +40,7 @@ const App: React.FC = () => {
 	const handleReset = () => {
 		if (value !== '') {
 			sendCommand('RESET');
+			sendRobot({ type: 'RESET' });
 			setValue('');
 		}
 	};
@@ -56,6 +58,24 @@ const App: React.FC = () => {
 		}, 500);
 	}, [sendCommand, sendRobot]);
 
+	// Example data
+	const dataFromDb = [
+		{
+			name: 'Simon',
+			room: 'Square',
+			command: 'VGHGV',
+			language: 'English',
+			date: '2023-09-10',
+		},
+		{
+			name: 'Simon 2',
+			room: 'Circle',
+			command: 'ABCD',
+			language: 'Swedish',
+			date: '2023-09-10',
+		},
+		// Add more data as needed
+	];
 	console.log(stepState.value);
 
 	const renderSteps = () => {
@@ -121,14 +141,7 @@ const App: React.FC = () => {
 						isRobotFinished={commandState.context.showSuccess}
 					>
 						<div className="flex flex-col items-center">
-							<label className="text-white font-medium font-semibold mb-2">
-								<Text
-									text="Step 4: Enter your command"
-									as="h3"
-									className="text-lg font-bold text-white mb-4"
-								/>
-							</label>
-							<div className="flex flex-row justify-items-center">
+							<div className="flex flex-row justify-items-center mt-4">
 								<input
 									className={clsx('h-10 mr-2 p-2 font-normal rounded', {
 										'border-2 border-red-500': commandState.context.showError,
@@ -144,9 +157,7 @@ const App: React.FC = () => {
 									className="font-bold py-2 px-4 rounded mb-10 mr-2"
 									type="button"
 									onClick={() => {
-										if (value !== '') {
-											sendCommand({ type: 'SUBMIT', value: value });
-										}
+										sendCommand({ type: 'SUBMIT', value: value });
 									}}
 									colors={{
 										background: 'blue-900',
@@ -260,28 +271,18 @@ const App: React.FC = () => {
 	return (
 		<MasterLayout>
 			<header className="bg-black relative flex flex-wrap items-center justify-between p-8 lg:justify-center xl:px-0">
-				{/* <img src={logo} alt="Logo" className="w-10 h-10 mr-4" /> */}
-
-				<Button
-					className="py-2 px-4 rounded border"
-					colors={{
-						background: 'transparent',
-						text: 'white',
-						hoverBackground: 'gray-100',
-						hoverText: 'black',
-					}}
-				>
-					<Text text="History" as="span" className="text-m font-medium" />
-				</Button>
-			</header>
-			<main className="flex flex-col w-full h-full justify-center items-center">
 				<Text
-					text="Welcome to my Robot Project!"
+					text="Welcome to Simons robot project!"
 					as="h1"
 					className="text-2xl font-bold text-white py-8"
 				/>
-				<div className="relative w-full h-full mt-auto overflow-hidden transition-all">
+			</header>
+			<main className="flex flex-col w-full h-full justify-center items-center py-10">
+				<div className="flex flex-col justify-center items-center overflow-hidden mt-8 p-4 rounded-md transition-all">
 					{renderSteps()}
+				</div>
+				<div className="flex flex-row justify-center items-center mx-auto pt-10">
+					<HistoryList data={dataFromDb} />
 				</div>
 			</main>
 			<Footer />
