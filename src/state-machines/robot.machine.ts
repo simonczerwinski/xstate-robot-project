@@ -91,32 +91,20 @@ export const robotMachine = (
 				moveForward: assign({
 					y: (context) => {
 						switch (context.direction) {
-							case 0: // Return NORTH and check grid boundaries to prevent robot from going outside grid
-								return Math.min(
-									context.gridHeight - 1,
-									Math.max(0, context.y - 1)
-								);
-							case 2: // Return SOUTH and check grid boundaries to prevent robot from going outside grid
-								return Math.min(
-									context.gridHeight - 1,
-									Math.max(0, context.y + 1)
-								);
+							case 0: // Return NORTH
+								return context.y - 1;
+							case 2: // Return SOUTH
+								return context.y + 1;
 							default:
 								return context.y; // No change for EAST or WEST
 						}
 					},
 					x: (context) => {
 						switch (context.direction) {
-							case 1: // Return EAST and check grid boundaries to prevent robot from going outside grid
-								return Math.min(
-									context.gridWidth - 1,
-									Math.max(0, context.x + 1)
-								);
-							case 3: // Return WEST and check grid boundaries to prevent robot from going outside grid
-								return Math.min(
-									context.gridWidth - 1,
-									Math.max(0, context.x - 1)
-								);
+							case 1: // Return EAST
+								return context.x + 1;
+							case 3: // Return WEST
+								return context.x - 1;
 							default:
 								return context.x; // No change for NORTH or SOUTH
 						}
