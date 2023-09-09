@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
 import { commandMachine } from '../../state-machines/command.machine';
-import { robotMachine } from '../../state-machines/robot.machine';
 import Button from '../Button';
 import { Play } from 'react-feather';
 import { RotateCcw } from 'react-feather';
@@ -13,11 +12,11 @@ type Props = {
 	onSubmit: (value: string) => void;
 	onReset: () => void;
 	className?: string;
+	robotOnReset?: boolean;
 };
 
-const CommandInput: React.FC<Props> = ({ onSubmit, onReset }) => {
+const CommandInput: React.FC<Props> = ({ onSubmit, onReset, robotOnReset }) => {
 	const [commandState, sendCommand] = useMachine(commandMachine);
-	const [robotState, sendRobot] = useMachine(robotMachine);
 	const [inputValue, setInputValue] = useState('');
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,8 +42,7 @@ const CommandInput: React.FC<Props> = ({ onSubmit, onReset }) => {
 		setTimeout(() => {
 			sendCommand('LOAD');
 		}, 500);
-	}, [sendCommand, sendRobot]);
-	console.log(robotState);
+	}, [sendCommand]);
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row justify-items-center  mt-4">
@@ -86,7 +84,7 @@ const CommandInput: React.FC<Props> = ({ onSubmit, onReset }) => {
 					onClick={handleReset}
 					title="Reset robot"
 				>
-					{robotState.matches('resetting') ? (
+					{robotOnReset ? (
 						<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
 							<Skeleton circle width={20} height={20} />
 						</SkeletonTheme>

@@ -4,12 +4,11 @@ import Button from '../Button';
 import Text from '../Text';
 
 interface CommandSaveProps {
-	onSave: (name: string) => void;
 	storeRoomType?: string;
 	storeCommandInput?: string;
 }
 
-const CommandSave: React.FC<CommandSaveProps> = ({ onSave, storeRoomType }) => {
+const CommandSave: React.FC<CommandSaveProps> = ({ storeRoomType }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [nameInput, setNameInput] = useState('');
 
@@ -18,7 +17,7 @@ const CommandSave: React.FC<CommandSaveProps> = ({ onSave, storeRoomType }) => {
 	};
 
 	const handleModalSubmit = () => {
-		onSave(nameInput);
+		// onSave(nameInput);
 		setIsModalOpen(false);
 	};
 

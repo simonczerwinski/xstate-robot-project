@@ -29,6 +29,7 @@ const Robot: React.FC<Props> = ({
 		transform: `scale(${scale})`,
 		transition: 'transform 0.3s ease',
 	};
+	console.log(directionRotate);
 	const directionAnimation = {
 		transform: `rotate(${directionRotate}deg)`,
 		transition: 'transform 0.3s ease',
@@ -43,8 +44,8 @@ const Robot: React.FC<Props> = ({
 			style={{
 				...animation,
 			}}
-			onMouseEnter={onMouseEnter}
-			onMouseLeave={onMouseLeave}
+			// onMouseEnter={onMouseEnter}
+			// onMouseLeave={onMouseLeave}
 		>
 			<img
 				style={{

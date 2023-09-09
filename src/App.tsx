@@ -58,9 +58,9 @@ const App: React.FC = () => {
 			</header>
 			<main className="flex flex-col w-full h-full pt-32 px-8 bg-gradient-to-b from-black to-indigo-950">
 				<div className="flex flex-col lg:flex-row justify-center lg:justify-between items-center mt-8 p-4 rounded-md transition-all">
-					<SquareRoom SquareRoomResponse={squareRoomResult} />
+					<SquareRoom />
 					{/* <div className="hidden lg:block w-1 bg-gray-300 h-full mx-4"></div> */}
-					<CircleRoom resCircleRoom={circleRoomResult} />
+					<CircleRoom />
 				</div>
 				<div className="flex flex-row justify-center items-center mx-auto pt-10">
 					<HistoryList data={getHistoryFromDb} />

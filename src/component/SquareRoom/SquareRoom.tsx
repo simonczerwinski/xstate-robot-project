@@ -7,11 +7,12 @@ import CommandInput from '../CommandInput';
 import CommandSave from '../CommandSave';
 
 type Props = {
-	SquareRoomResponse?: string;
 	children?: React.ReactNode;
 };
 
 const room = 'Square';
+const startPositionX = 1;
+const startPositionY = 2;
 const gridWidth = 5;
 const gridHeight = 5;
 const gridSize = 400;
@@ -29,30 +30,20 @@ const Wall: React.FC<Props> = ({ children }) => {
 	);
 };
 
-const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
-	const [robotState, sendRobot] = useMachine(robotMachine);
+const SquareRoom: React.FC<Props> = () => {
+	const [robotState, sendRobot] = useMachine(() =>
+		robotMachine(gridWidth, gridHeight, startPositionX, startPositionY)
+	);
 	const [inputValue, setInputValue] = useState('');
-	const [prevInputValue, setPrevInputValue] = useState('');
 
 	const handleSubmit = (value: string) => {
-		if (prevInputValue !== inputValue) {
-			sendRobot('RESET');
-			setInputValue('');
-		} else {
-			setInputValue(value);
-		}
+		setInputValue(value);
 	};
 
 	const handleReset = () => {
 		sendRobot('RESET');
 		setInputValue('');
-		setPrevInputValue('');
 	};
-	const handleSave = (name: string) => {
-		// Handle saving the name input here
-		console.log('Saving:', name);
-	};
-	const getCommands = inputValue?.toLocaleUpperCase().split('');
 
 	useEffect(() => {
 		const handleCommands = async () => {
@@ -64,6 +55,7 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 				R: 'TURN_RIGHT',
 				L: 'TURN_LEFT',
 			};
+			const getCommands = inputValue?.toLocaleUpperCase().split('');
 			if (getCommands && getCommands.length > 0) {
 				for (const command of getCommands) {
 					if (commandMapper[command]) {
@@ -74,7 +66,6 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 						console.error(`Bad command: ${command}`);
 					}
 				}
-				setPrevInputValue(inputValue);
 				sendRobot('FINISH');
 			} else {
 				sendRobot('RESET');
@@ -85,42 +76,36 @@ const SquareRoom: React.FC<Props> = ({ SquareRoomResponse }) => {
 	}, [inputValue, sendRobot]);
 
 	const { x, y, direction, directionRotate } = robotState.context;
-
 	return (
 		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-30 rounded-md p-8">
 			<Wall>
 				<div className="w-[200px] h-[200px] flex justify-center items-center z-0">
 					<div className="relative flex flex-col w-full h-full">
-						<div
-							id="squareroom"
-							className={clsx('w-full h-full bg-black text-white rounded')}
-						>
-							<Robot
-								id="robot"
-								x={x}
-								y={y}
-								directionText={direction}
-								directionRotate={directionRotate}
-								finished={robotState.context.showSuccess}
-								animation={{
-									top: `${y * cellSize}px`,
-									left: `${x * cellSize}px`,
-									transform: `translate(-50%, -50%)`,
-									transition: 'all 0.3s linear',
-								}}
-							/>
-						</div>
+						<Robot
+							id="robot"
+							x={x}
+							y={y}
+							directionText={direction}
+							directionRotate={directionRotate}
+							finished={robotState.context.showSuccess}
+							animation={{
+								top: `${y * cellSize}px`,
+								left: `${x * cellSize}px`,
+								transform: `translate(-10%, -20%)`,
+								transition: 'all 0.3s linear',
+							}}
+						/>
 					</div>
 				</div>
 			</Wall>
 			<div className="flex flex-col">
-				<CommandInput onSubmit={handleSubmit} onReset={handleReset} />
+				<CommandInput
+					onSubmit={handleSubmit}
+					onReset={handleReset}
+					robotOnReset={robotState.matches('resetting')}
+				/>
 				{robotState.context.showSuccess && (
-					<CommandSave
-						onSave={handleSave}
-						storeRoomType={room}
-						storeCommandInput={inputValue}
-					/>
+					<CommandSave storeRoomType={room} storeCommandInput={inputValue} />
 				)}
 			</div>
 		</div>

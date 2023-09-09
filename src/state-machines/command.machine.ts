@@ -1,17 +1,10 @@
 import { createMachine, assign } from 'xstate';
 
-interface CommandContext {
-	type: string;
-	value?: string;
-}
-
-export const commandMachine = createMachine<
-	{ inputValue: string; showSuccess: boolean; showError: boolean },
-	CommandContext
->(
+export const commandMachine = createMachine(
 	{
 		id: 'commandMachine',
 		initial: 'idle',
+		predictableActionArguments: false,
 		context: {
 			inputValue: '',
 			showSuccess: false,
