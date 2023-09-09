@@ -15,7 +15,7 @@ interface Props {
 
 const HistoryList: React.FC<Props> = ({ data }) => {
 	return (
-		<div className="bg-black bg-opacity-30 p-4 rounded-md">
+		<div className="bg-black bg-opacity-30 p-4 mb-8 rounded-md">
 			<Text
 				as="h3"
 				text="History"

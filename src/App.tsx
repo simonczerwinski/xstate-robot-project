@@ -51,7 +51,7 @@ const App: React.FC = () => {
 					className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl m-text-xl font-bold text-white py-8 relative z-10"
 				/>
 				<Text
-					text="This is Simons robot project!"
+					text="This is Simons Robot machine"
 					as="h2"
 					className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl m-text-xl font-bold text-white py-8 relative z-10"
 				/>

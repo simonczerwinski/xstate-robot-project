@@ -1,12 +1,22 @@
 import { createMachine, assign } from 'xstate';
-
+interface RobotContext {
+	x: number;
+	y: number;
+	direction: number;
+	gridWidth: number;
+	gridHeight: number;
+	getDirection: string;
+	rotateRight: number;
+	rotateLeft: number;
+	showSuccess: boolean;
+}
 export const robotMachine = (
 	gridWidthValue: number,
 	gridHeightValue: number,
 	startPositionX: number,
 	startPositionY: number
 ) =>
-	createMachine(
+	createMachine<RobotContext>(
 		{
 			id: 'robotMachine',
 			initial: 'init',
@@ -14,10 +24,12 @@ export const robotMachine = (
 			context: {
 				x: 0,
 				y: 0,
+				direction: 0,
+				getDirection: '',
+				rotateRight: 0,
+				rotateLeft: 0,
 				gridWidth: gridWidthValue,
 				gridHeight: gridHeightValue,
-				direction: '',
-				directionRotate: 0,
 				showSuccess: false,
 			},
 			states: {
@@ -26,9 +38,6 @@ export const robotMachine = (
 					entry: assign({
 						x: startPositionX,
 						y: startPositionY,
-						direction: 'N: NORTH',
-						directionRotate: 0,
-						showSuccess: false,
 					}),
 					after: {
 						100: 'idle',
@@ -38,15 +47,17 @@ export const robotMachine = (
 				idle: {
 					on: {
 						MOVE_FORWARD: {
-							target: 'move',
-							actions: 'moveForward',
+							actions: [
+								'moveForward',
+								'getDirection',
+								'rotateRight',
+								'rotateLeft',
+							],
 						},
 						TURN_RIGHT: {
-							target: 'turn',
 							actions: 'turnRight',
 						},
 						TURN_LEFT: {
-							target: 'turn',
 							actions: 'turnLeft',
 						},
 						FINISH: {
@@ -58,22 +69,10 @@ export const robotMachine = (
 						},
 					},
 				},
-				// Sets a delay when the robot moves to catch up with the animations outside the machine
-				move: {
-					after: {
-						100: 'idle',
-					},
-				},
-				// Sets a delay when the robot turns to catch up with the animations outside the machine
-				turn: {
-					after: {
-						100: 'idle',
-					},
-				},
 				// Reset the robot to initial position
 				resetting: {
 					after: {
-						500: 'init',
+						200: 'init',
 					},
 					entry: 'resetRobot',
 				},
@@ -88,87 +87,126 @@ export const robotMachine = (
 		},
 		{
 			actions: {
+				// Move the robot forward depending on the value context.direction gets from the TURN_RIGHT and TURN_LEFT actions
 				moveForward: assign({
-					// Move the robot forward depending on the value context.direction gets.
-					// Move the robot in different directions by (decrement y/x) or (increment y/x).
-					// Otherwise, keep the current y/x coordinate.
 					y: (context) => {
 						switch (context.direction) {
-							case 'N: NORTH':
-								return context.y - 1;
-							case 'S: SOUTH':
-								return context.y + 1;
+							case 0: // Return NORTH and check grid boundaries to prevent robot from going outside grid
+								return Math.min(
+									context.gridHeight - 1,
+									Math.max(0, context.y - 1)
+								);
+							case 2: // Return SOUTH and check grid boundaries to prevent robot from going outside grid
+								return Math.min(
+									context.gridHeight - 1,
+									Math.max(0, context.y + 1)
+								);
 							default:
-								return context.y;
+								return context.y; // No change for EAST or WEST
 						}
 					},
 					x: (context) => {
 						switch (context.direction) {
-							case 'Ö: EAST':
-								return context.x + 1;
-							case 'V: WEST':
-								return context.x - 1;
+							case 1: // Return EAST and check grid boundaries to prevent robot from going outside grid
+								return Math.min(
+									context.gridWidth - 1,
+									Math.max(0, context.x + 1)
+								);
+							case 3: // Return WEST and check grid boundaries to prevent robot from going outside grid
+								return Math.min(
+									context.gridWidth - 1,
+									Math.max(0, context.x - 1)
+								);
 							default:
-								return context.x;
+								return context.x; // No change for NORTH or SOUTH
 						}
 					},
-
 					showSuccess: false,
 				}),
-
-				// Rotate the robot to the right but don't change the movement. Await the next move "forward" based on the direction
+				// Move the robot to the right by increment y/x.
 				turnRight: assign({
-					directionRotate: (context) => {
-						const rotation = (context.directionRotate += 90);
-						return rotation;
-					},
 					direction: (context) => {
-						switch (context.directionRotate) {
-							case 0:
-								return 'N: NORTH';
-							case 90:
-								return 'Ö: EAST';
-							case 180:
-								return 'S: SOUTH';
-							case 270:
-								return 'V: WEST';
-							default:
-								return 'N: NORTH';
+						context.direction++;
+						if (context.direction > 3) {
+							context.direction = 0;
 						}
+						return context.direction;
 					},
 					showSuccess: false,
 				}),
-
-				// Rotate the robot to the left but don't change the movement. Await the next move "forward" based on the direction
+				// Move the robot to the right by decrement y/x
 				turnLeft: assign({
-					directionRotate: (context) => {
-						const rotation = (context.directionRotate -= 90);
-						return rotation;
-					},
 					direction: (context) => {
-						switch (context.directionRotate) {
-							case 0:
-								return 'N: NORTH';
-							case -90:
-								return 'Ö: EAST';
-							case -180:
-								return 'S: SOUTH';
-							case -270:
-								return 'V: WEST';
-							default:
-								return 'N: NORTH';
+						context.direction--;
+						if (context.direction < 0) {
+							context.direction = 3;
 						}
+						return context.direction;
 					},
 					showSuccess: false,
 				}),
-
+				// Get the direction of the robot by checking the value of context.direction
+				getDirection: assign({
+					getDirection: (context) => {
+						console.log(context.direction);
+						switch (context.direction) {
+							case 0:
+								return (context.getDirection = 'N');
+							case 1:
+								return (context.getDirection = 'Ö');
+							case 2:
+								return (context.getDirection = 'S');
+							case 3:
+								return (context.getDirection = 'V');
+							default:
+								return (context.getDirection = 'N');
+						}
+					},
+				}),
+				// Animate the robot by rotating it to the right
+				rotateRight: assign({
+					rotateRight: (context) => {
+						switch (context.direction) {
+							case 0:
+								return (context.rotateRight = 0);
+							case 1:
+								return (context.rotateRight = 90);
+							case 2:
+								return (context.rotateRight = 180);
+							case 3:
+								return (context.rotateRight = 270);
+							default:
+								return (context.rotateRight = 0);
+						}
+					},
+				}),
+				// Animate the robot by rotating it to the left
+				rotateLeft: assign({
+					rotateLeft: (context) => {
+						switch (context.direction) {
+							case 0:
+								return (context.rotateLeft = 0);
+							case 1:
+								return (context.rotateLeft = -90);
+							case 2:
+								return (context.rotateLeft = -180);
+							case 3:
+								return (context.rotateLeft = -270);
+							default:
+								return (context.rotateLeft = 0);
+						}
+					},
+				}),
 				//	Reset the robot to initial position
 				resetRobot: assign({
-					direction: 'N: NORTH',
-					directionRotate: 0,
+					x: startPositionX,
+					y: startPositionY,
+					getDirection: 'N: NORTH',
+					direction: 0,
+					rotateRight: 0,
+					rotateLeft: 0,
 					showSuccess: false,
 				}),
-
 				finish: assign({
 					showSuccess: true,
 				}),

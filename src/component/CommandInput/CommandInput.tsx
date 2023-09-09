@@ -33,7 +33,7 @@ const CommandInput: React.FC<Props> = ({ onSubmit, onReset, robotOnReset }) => {
 
 	const handleReset = () => {
 		if (inputValue !== '') {
-			sendCommand('RESET');
+			sendCommand({ type: 'RESET' });
 			setInputValue('');
 			onReset();
 		}
@@ -48,10 +48,10 @@ const CommandInput: React.FC<Props> = ({ onSubmit, onReset, robotOnReset }) => {
 			<div className="flex flex-row justify-items-center  mt-4">
 				<input
 					className={clsx(
-						'h-10 mr-2 p-2 font-normal rounded bg-slate-900 text-white',
+						'h-10 mr-2 p-2 border-2 font-normal rounded bg-slate-900 text-white',
 						{
-							'border-2 border-red-500': commandState.context.showError,
-							'border-2 border-green-500': commandState.context.showSuccess,
+							' border-red-500': commandState.context.showError,
+							' border-green-500': commandState.context.showSuccess,
 						}
 					)}
 					placeholder="eg: VGHGV"

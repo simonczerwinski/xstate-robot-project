@@ -60,7 +60,7 @@ const SquareRoom: React.FC<Props> = () => {
 				for (const command of getCommands) {
 					if (commandMapper[command]) {
 						sendRobot(commandMapper[command]);
-						// Delay movement for smoother animation
+						// Delay sending commands for smoother animation
 						await new Promise((resolve) => setTimeout(resolve, 500));
 					} else {
 						console.error(`Bad command: ${command}`);
@@ -75,7 +75,8 @@ const SquareRoom: React.FC<Props> = () => {
 		handleCommands();
 	}, [inputValue, sendRobot]);
 
-	const { x, y, direction, directionRotate } = robotState.context;
+	const { x, y, getDirection, rotateRight, rotateLeft } = robotState.context;
+	console.log(robotState.context);
 	return (
 		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-30 rounded-md p-8">
 			<Wall>
@@ -85,8 +86,9 @@ const SquareRoom: React.FC<Props> = () => {
 							id="robot"
 							x={x}
 							y={y}
-							directionText={direction}
-							directionRotate={directionRotate}
+							direction={getDirection}
+							turnRight={rotateRight}
+							turnLeft={rotateLeft}
 							finished={robotState.context.showSuccess}
 							animation={{
 								top: `${y * cellSize}px`,

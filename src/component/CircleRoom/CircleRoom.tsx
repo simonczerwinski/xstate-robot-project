@@ -35,15 +35,9 @@ const CircleRoom: React.FC<Props> = () => {
 		robotMachine(gridWidth, gridHeight, startPositionX, startPositionY)
 	);
 	const [inputValue, setInputValue] = useState('');
-	const [prevInputValue, setPrevInputValue] = useState('');
 
 	const handleSubmit = (value: string) => {
-		if (prevInputValue !== inputValue) {
-			sendRobot('RESET');
-			setInputValue('');
-		} else {
-			setInputValue(value);
-		}
+		setInputValue(value);
 	};
 
 	const handleReset = () => {
@@ -66,13 +60,12 @@ const CircleRoom: React.FC<Props> = () => {
 				for (const command of getCommands) {
 					if (commandMapper[command]) {
 						sendRobot(commandMapper[command]);
-						// Delay movement for smoother animation
+						// Delay sending commands for smoother animation
 						await new Promise((resolve) => setTimeout(resolve, 500));
 					} else {
 						console.error(`Bad command: ${command}`);
 					}
 				}
-				setPrevInputValue(inputValue);
 				sendRobot('FINISH');
 			} else {
 				sendRobot('RESET');
@@ -82,7 +75,7 @@ const CircleRoom: React.FC<Props> = () => {
 		handleCommands();
 	}, [inputValue, sendRobot]);
 
-	const { x, y, direction, directionRotate } = robotState.context;
+	const { x, y, getDirection, rotateLeft, rotateRight } = robotState.context;
 
 	return (
 		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-30 rounded-md p-8">
@@ -93,8 +86,9 @@ const CircleRoom: React.FC<Props> = () => {
 							id="robot"
 							x={x}
 							y={y}
-							directionText={direction}
-							directionRotate={directionRotate}
+							direction={getDirection}
+							turnRight={rotateLeft}
+							turnLeft={rotateRight}
 							finished={robotState.context.showSuccess}
 							animation={{
 								top: `${y * cellSize}px`,
