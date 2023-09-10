@@ -4,48 +4,96 @@ import clsx from 'clsx';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
 import { commandMachine } from '../../state-machines/command.machine';
+import { robotMachine } from '../../state-machines/robot.machine';
 import Button from '../Button';
 import { Play } from 'react-feather';
 import { RotateCcw } from 'react-feather';
+import CommandSave from '../CommandSave';
 
 type Props = {
-	onSubmit: (value: string) => void;
-	onReset: () => void;
-	className?: string;
+	roomType?: string;
+	gridWidth?: number;
+	gridHeight?: number;
+	startPositionX?: number;
+	startPositionY?: number;
 	robotOnReset?: boolean;
+	renderRobotAnimationFromRobotContext?: any;
 };
 
-const CommandInput: React.FC<Props> = ({ onSubmit, onReset, robotOnReset }) => {
+const CommandInput: React.FC<Props> = ({
+	roomType,
+	robotOnReset,
+	gridWidth,
+	gridHeight,
+	startPositionX,
+	startPositionY,
+	renderRobotAnimationFromRobotContext,
+}) => {
 	const [commandState, sendCommand] = useMachine(commandMachine);
+	const [robotState, sendRobot] = useMachine(() =>
+		robotMachine(gridWidth, gridHeight, startPositionX, startPositionY)
+	);
 	const [inputValue, setInputValue] = useState('');
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value || '';
+		console.log(inputValue);
 		setInputValue(inputValue);
 	};
-
 	const handleSubmit = () => {
-		if (inputValue !== '') {
-			sendCommand({ type: 'SUBMIT', value: inputValue });
-			onSubmit(inputValue);
+		if (commandState.matches('idle')) {
+			sendCommand({ type: 'SUBMIT', inputValue });
+		} else {
+			console.error('Cannot submit while the commandMachine is not idle');
 		}
+		handleCommands();
 	};
 
 	const handleReset = () => {
-		if (inputValue !== '') {
-			sendCommand({ type: 'RESET' });
-			setInputValue('');
-			onReset();
+		sendCommand('RESET');
+		sendRobot('RESET');
+		setInputValue('');
+	};
+
+	const handleCommands = async () => {
+		const commandMapper = {
+			G: 'MOVE_FORWARD',
+			H: 'TURN_RIGHT',
+			V: 'TURN_LEFT',
+			F: 'MOVE_FORWARD',
+			R: 'TURN_RIGHT',
+			L: 'TURN_LEFT',
+		};
+		const getCommands = inputValue?.toLocaleUpperCase().split('');
+		if (getCommands && getCommands.length > 0) {
+			for (const command of getCommands) {
+				if (commandMapper[command]) {
+					sendRobot(commandMapper[command]);
+					// Delay sending commands for smoother animation
+					await new Promise((resolve) => setTimeout(resolve, 500));
+				} else {
+					console.error(`Bad command: ${command}`);
+				}
+			}
+			sendRobot('FINISH');
+		} else {
+			sendRobot('RESET');
 		}
 	};
+
+	useEffect(() => {
+		renderRobotAnimationFromRobotContext(robotState.context);
+	}, [robotState.context, renderRobotAnimationFromRobotContext]);
+
 	useEffect(() => {
 		setTimeout(() => {
 			sendCommand('LOAD');
-		}, 500);
-	}, [sendCommand]);
+		}, 100);
+	}, [sendCommand, sendRobot, handleCommands]);
+
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row justify-items-center  mt-4">
+			<div className="flex flex-row justify-items-center mt-4">
 				<input
 					className={clsx(
 						'h-10 mr-2 p-2 border-2 font-normal rounded bg-slate-900 text-white',
@@ -93,6 +141,10 @@ const CommandInput: React.FC<Props> = ({ onSubmit, onReset, robotOnReset }) => {
 					)}
 				</Button>
 			</div>
+
+			{commandState.context.showSuccess && robotState.context.showSuccess && (
+				<CommandSave storeRoomType={roomType} storeCommandInput={inputValue} />
+			)}
 		</div>
 	);
 };

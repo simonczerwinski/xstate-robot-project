@@ -1,11 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
-export type ButtonSize = 'small' | 'medium' | 'large';
-
 type Props = {
 	children: React.ReactNode;
-	size?: ButtonSize;
 	className?: string;
 	colors?: {
 		background: string;

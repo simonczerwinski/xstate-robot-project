@@ -16,6 +16,7 @@ export const commandMachine = createMachine(
 				on: {
 					SUBMIT: 'loading',
 					RESET: 'reset',
+					SUCCESS: 'success',
 					ERROR: 'error',
 				},
 			},
@@ -93,7 +94,12 @@ export const commandMachine = createMachine(
 								['G', 'V', 'H', 'F', 'R', 'L'].includes(char)
 							)
 						) {
-							resolve(event.value);
+							// Reset the error state to false when a valid input is provided
+							resolve({
+								...context,
+								showError: false,
+								inputValue: event.value,
+							});
 						} else {
 							console.error('Error: Invalid input value');
 							reject({ type: 'ERROR' });

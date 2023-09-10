@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHover } from '../../hooks/useHover';
 import style from './Robot.module.css';
 import clsx from 'clsx';
-import Text from '../Text';
 
 interface Props {
 	id?: string;
@@ -49,8 +48,7 @@ const Robot: React.FC<Props> = ({
 		<div
 			id={id}
 			className={clsx(
-				'absolute flex justify-center w-10 h-10 bg-teal-600 bg-opacity-80 animate-pulse rounded-full cursor-pointer z-10',
-				style
+				'absolute flex justify-center w-10 h-10 bg-teal-600 bg-opacity-80 animate-pulse rounded-full cursor-pointer z-10'
 			)}
 			style={{
 				...animation,

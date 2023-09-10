@@ -11,10 +11,10 @@ interface RobotContext {
 	showSuccess: boolean;
 }
 export const robotMachine = (
-	gridWidthValue: number,
-	gridHeightValue: number,
-	startPositionX: number,
-	startPositionY: number
+	gridWidthValue?: number,
+	gridHeightValue?: number,
+	startPositionX?: number,
+	startPositionY?: number
 ) =>
 	createMachine<RobotContext>(
 		{
@@ -28,8 +28,8 @@ export const robotMachine = (
 				getDirection: '',
 				rotateRight: 0,
 				rotateLeft: 0,
-				gridWidth: gridWidthValue,
-				gridHeight: gridHeightValue,
+				gridWidth: gridWidthValue || 0,
+				gridHeight: gridHeightValue || 0,
 				showSuccess: false,
 			},
 			states: {
@@ -91,22 +91,22 @@ export const robotMachine = (
 				moveForward: assign({
 					y: (context) => {
 						switch (context.direction) {
-							case 0: // Return NORTH
-								return context.y - 1;
-							case 2: // Return SOUTH
-								return context.y + 1;
+							case 0: // Return NORTH and ensure the new y position doesn't go below 0 to stay within the grid
+								return Math.max(context.y - 1, 0);
+							case 2: // Return SOUTH and ensure that the new y position doesn't exceed the grid height by decrementing the grid height by 1
+								return Math.min(context.y + 1, context.gridHeight - 1);
 							default:
-								return context.y; // No change for EAST or WEST
+								return context.y; // No change for NORTH or SOUTH
 						}
 					},
 					x: (context) => {
 						switch (context.direction) {
-							case 1: // Return EAST
-								return context.x + 1;
-							case 3: // Return WEST
-								return context.x - 1;
+							case 1: // Return EAST and ensure that the new x position doesn't exceed the grid width by decrementing the grid width by 1
+								return Math.min(context.x + 1, context.gridWidth - 1);
+							case 3: // Return WEST and ensure the new x position doesn't go below 0 to stay within the grid
+								return Math.max(context.x - 1, 0);
 							default:
-								return context.x; // No change for NORTH or SOUTH
+								return context.x; // No change for EAST or WEST
 						}
 					},
 					showSuccess: false,

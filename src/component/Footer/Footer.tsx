@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
 	const currentYear = getCurrentYear();
 
 	return (
-		<footer className="flex flex-row mt-auto justify-center p-4 bg-black">
+		<footer className="relative flex flex-row mt-auto justify-center p-4 bg-black">
 			<Text
 				text={`Created by: Simon Czerwinski © ${currentYear}`}
 				as="h3"
