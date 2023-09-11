@@ -1,5 +1,6 @@
 # Welcome to My Robot Machine - By Simon Czerwinski
-![screenshot-sc-robot-project](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/64ff3c94-1367-47a0-a88a-44900efdb59a)
+
+![screenshot-sc-robot-project](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/ab7c4555-7c09-4c2b-9fd2-cbb4b477ad2a)
 
 ## What You'll Find Here
 
