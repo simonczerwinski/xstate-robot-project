@@ -76,7 +76,6 @@ const CommandInput: React.FC<Props> = ({
 					// Delay sending commands for smoother animation
 					await new Promise((resolve) => setTimeout(resolve, 500));
 				} else {
-					console.error(`Bad command: ${command}`);
 					sendRobot('ERROR');
 					setShowError(true);
 					break;

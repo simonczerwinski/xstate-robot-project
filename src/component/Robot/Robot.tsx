@@ -35,10 +35,9 @@ const Robot: React.FC<Props> = ({
 	};
 
 	useEffect(() => {
-		// Get the turnRight and turnLeft values.
+		// Get the turnRight and turnLeft values, check the differences between the two values.
 		const newRotation = rotateRight - rotateLeft;
 		setRotation(newRotation || 0);
-		console.log('newRotation', newRotation);
 	}, [rotateRight, rotateLeft]);
 
 	const directionAnimation = {
