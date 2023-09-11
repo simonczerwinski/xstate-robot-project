@@ -6,6 +6,7 @@ import Text from '../../Text';
 
 type Props = {
 	children?: React.ReactNode;
+	renderHistoryAndUpdate?: () => void;
 };
 
 const room = 'Circle';
@@ -28,7 +29,7 @@ const Wall: React.FC<Props> = ({ children }) => {
 	);
 };
 
-const CircleRoom: React.FC<Props> = () => {
+const CircleRoom: React.FC<Props> = ({ renderHistoryAndUpdate }) => {
 	const [robotValues, setRobotValues] = useState({
 		x: startPositionX,
 		y: startPositionY,
@@ -85,6 +86,7 @@ const CircleRoom: React.FC<Props> = () => {
 					startPositionX={startPositionX}
 					startPositionY={startPositionY}
 					renderRobotPropsFromRobotContextValues={setRobotValues}
+					renderHistoryLogs={renderHistoryAndUpdate}
 				/>
 			</div>
 		</div>

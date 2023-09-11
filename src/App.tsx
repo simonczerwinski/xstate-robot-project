@@ -10,14 +10,20 @@ import { SquareRoom, CircleRoom } from './component/Rooms';
 const App: React.FC = () => {
 	const [commandHistoryLogs, setCommandHistoryLogs] = useState([]);
 
-	useEffect(() => {
-		// Load data from local storage when the component mounts
+	const renderHistoryLogs = () => {
+		// Load data from the local storage
 		const commandHistoryLogsString = localStorage.getItem('commandHistoryLogs');
 		const commandHistoryLogs = commandHistoryLogsString
 			? JSON.parse(commandHistoryLogsString)
 			: [];
 		setCommandHistoryLogs(commandHistoryLogs);
-	}, []);
+	};
+
+	useEffect(() => {
+		setTimeout(() => {
+			renderHistoryLogs();
+		}, 1000);
+	}, [renderHistoryLogs]);
 	return (
 		<MasterLayout>
 			<video
@@ -41,8 +47,8 @@ const App: React.FC = () => {
 				<div className="container mx-auto">
 					<div className="absolute inset-0 bg-black opacity-60 lg:block hidden"></div>
 					<div className="flex flex-col lg:flex-row justify-center lg:justify-between lg:items-start md:items-center mt-8 p-4 rounded-md transition-all">
-						<SquareRoom />
-						<CircleRoom />
+						<SquareRoom renderHistoryAndUpdate={renderHistoryLogs} />
+						<CircleRoom renderHistoryAndUpdate={renderHistoryLogs} />
 					</div>
 					<div className="relative flex flex-row justify-center items-center mx-auto pt-10">
 						<HistoryLogs data={commandHistoryLogs} />

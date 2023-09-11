@@ -7,20 +7,15 @@ type Props = {
 		room?: string;
 		command?: string;
 		language?: string;
-		date?: string;
+		date?: any;
 	}>;
 };
 
 const HistoryLogs: React.FC<Props> = ({ data }) => {
 	const [historyData, setHistoryData] = useState(data);
 	useEffect(() => {
-		const sortHistoryToLatestDate = (a: any, b: any) => {
-			const dateA = new Date(a.date);
-			const dateB = new Date(b.date);
-			return dateB.getTime() - dateA.getTime();
-		};
-
-		setHistoryData(data.sort(sortHistoryToLatestDate));
+		// Sort the history logs by latest date first
+		setHistoryData(data.sort((a, b) => b.date.localeCompare(a.date)));
 	}, [data]);
 	return (
 		<div className="bg-black bg-opacity-50 p-4 mb-8 rounded-md">

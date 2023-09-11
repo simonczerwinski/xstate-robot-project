@@ -85,7 +85,7 @@ Choose E2E testing (only E2E testing available now)
 
 ## Future Goals I plan
 
-- **State management**: Add more state managements and truncate some functions
+- **State management**: Add more state managements and move some functions to separate files
 
 - **Login**: Add a login system.
 

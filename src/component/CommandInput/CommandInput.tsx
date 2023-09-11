@@ -18,6 +18,7 @@ type Props = {
 	startPositionY?: number;
 	robotOnReset?: boolean;
 	renderRobotPropsFromRobotContextValues?: any;
+	renderHistoryLogs?: () => void;
 };
 
 const CommandInput: React.FC<Props> = ({
@@ -28,6 +29,7 @@ const CommandInput: React.FC<Props> = ({
 	startPositionX,
 	startPositionY,
 	renderRobotPropsFromRobotContextValues,
+	renderHistoryLogs,
 }) => {
 	const [robotState, sendRobot] = useMachine(() =>
 		robotMachine(gridWidth, gridHeight, startPositionX, startPositionY)
@@ -157,7 +159,11 @@ const CommandInput: React.FC<Props> = ({
 			</div>
 
 			{robotState.context.showSuccess && (
-				<CommandSave storeRoomType={roomType} storeCommandInput={inputValue} />
+				<CommandSave
+					storeRoomType={roomType}
+					storeCommandInput={inputValue}
+					updateHistoryLogs={renderHistoryLogs}
+				/>
 			)}
 		</div>
 	);

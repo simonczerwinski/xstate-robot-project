@@ -7,11 +7,13 @@ import clsx from 'clsx';
 interface CommandSaveProps {
 	storeRoomType?: string;
 	storeCommandInput?: string;
+	updateHistoryLogs?: () => void;
 }
 
 const CommandSave: React.FC<CommandSaveProps> = ({
 	storeRoomType,
 	storeCommandInput,
+	updateHistoryLogs,
 }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [nameInput, setNameInput] = useState('');
@@ -49,7 +51,8 @@ const CommandSave: React.FC<CommandSaveProps> = ({
 				setShowSaveButton(false);
 			}, 4000);
 		}
-
+		// Update the history logs in the HistoryLogs component
+		updateHistoryLogs;
 		setIsModalOpen(false);
 	};
 	return (

@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './global.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { inspect } from '@xstate/inspect';
 
-// Disabled for now
+// Disabled for now. Uncomment to show xState Visualizer.
+
+//import { inspect } from '@xstate/inspect';
 // if (process.env.NODE_ENV === 'development') {
 // 	inspect({
 // 		url: 'https://stately.ai/viz?inspect', // (default)
