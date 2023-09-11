@@ -40,9 +40,7 @@ npm run start
 
 This runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The page will reload if you make edits.
 
 To build the app for production to the build folder, use:
 
@@ -90,7 +88,7 @@ Choose E2E testing (only E2E testing available now)
 
 - **Zustand**: Maybe implement Zustand to test new state management magic instead of xState.
 
-- **Database**: Implement a Database like MongoDB or SupaBase instead of Local storage.
+- **Database**: Implement a Database like MongoDB or SupaBase instead of storing via Local storage.
 
 ## Enjoy
 
