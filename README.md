@@ -20,7 +20,7 @@ This project is built using the following technologies:
 
 - **Test**: I use Cypress to test the frontend (only E2E test is configured).
 
-- **Local storage**: Using local storage to save command inputs.
+- **Local storage**: Using Local storage to save name, input command, what room type was used and created date.
 
 ## Getting Started
 
