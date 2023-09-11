@@ -1,4 +1,4 @@
-# Welcome to My Robot Machine - By Simon Czerwinski
+# Welcome to the Robot Machine - By Simon Czerwinski
 
 ![screenshot-sc-robot-project](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/ab7c4555-7c09-4c2b-9fd2-cbb4b477ad2a)
 
@@ -68,7 +68,7 @@ npx cypress open
 
 Choose E2E testing (only E2E testing available now)
 
-## Future Goals I plan
+## Future goals I plan
 
 - **State management**: Add more state managements and move some functions to separate files
 
