@@ -9,6 +9,7 @@ interface RobotContext {
 	rotateRight: number;
 	rotateLeft: number;
 	showSuccess: boolean;
+	showError: boolean;
 }
 export const robotMachine = (
 	gridWidthValue?: number,
@@ -25,12 +26,13 @@ export const robotMachine = (
 				x: 0,
 				y: 0,
 				direction: 0,
-				getDirection: '',
+				getDirection: 'N',
 				rotateRight: 0,
 				rotateLeft: 0,
 				gridWidth: gridWidthValue || 0,
 				gridHeight: gridHeightValue || 0,
 				showSuccess: false,
+				showError: false,
 			},
 			states: {
 				// Set initial state and position of the robot
@@ -50,19 +52,23 @@ export const robotMachine = (
 							actions: [
 								'moveForward',
 								'getDirection',
-								'rotateRight',
-								'rotateLeft',
+								'setRotateRight',
+								'setRotateLeft',
 							],
 						},
 						TURN_RIGHT: {
-							actions: 'turnRight',
+							actions: ['turnRight', 'getDirection', 'setRotateRight'],
 						},
 						TURN_LEFT: {
-							actions: 'turnLeft',
+							actions: ['turnLeft', 'getDirection', 'setRotateLeft'],
 						},
 						FINISH: {
 							target: 'success',
 							actions: 'finish',
+						},
+						ERROR: {
+							target: 'error',
+							actions: 'setError',
 						},
 						RESET: {
 							target: 'resetting',
@@ -83,6 +89,11 @@ export const robotMachine = (
 					},
 					entry: 'finish',
 				},
+				error: {
+					after: {
+						300: 'idle',
+					},
+				},
 			},
 		},
 		{
@@ -96,7 +107,7 @@ export const robotMachine = (
 							case 2: // Return SOUTH and ensure that the new y position doesn't exceed the grid height by decrementing the grid height by 1
 								return Math.min(context.y + 1, context.gridHeight - 1);
 							default:
-								return context.y; // No change for NORTH or SOUTH
+								return context.y;
 						}
 					},
 					x: (context) => {
@@ -106,10 +117,11 @@ export const robotMachine = (
 							case 3: // Return WEST and ensure the new x position doesn't go below 0 to stay within the grid
 								return Math.max(context.x - 1, 0);
 							default:
-								return context.x; // No change for EAST or WEST
+								return context.x;
 						}
 					},
 					showSuccess: false,
+					showError: false,
 				}),
 				// Move the robot to the right by increment y/x.
 				turnRight: assign({
@@ -121,6 +133,7 @@ export const robotMachine = (
 						return context.direction;
 					},
 					showSuccess: false,
+					showError: false,
 				}),
 				// Move the robot to the right by decrement y/x
 				turnLeft: assign({
@@ -132,6 +145,7 @@ export const robotMachine = (
 						return context.direction;
 					},
 					showSuccess: false,
+					showError: false,
 				}),
 				// Get the direction of the robot by checking the value of context.direction
 				getDirection: assign({
@@ -169,7 +183,7 @@ export const robotMachine = (
 					},
 				}),
 				// Animate the robot by rotating it to the left
-				rotateLeft: assign({
+				setRotateLeft: assign({
 					rotateLeft: (context) => {
 						switch (context.direction) {
 							case 0:
@@ -189,14 +203,20 @@ export const robotMachine = (
 				resetRobot: assign({
 					x: startPositionX,
 					y: startPositionY,
-					getDirection: 'N: NORTH',
+					getDirection: 'N',
 					direction: 0,
 					rotateRight: 0,
 					rotateLeft: 0,
 					showSuccess: false,
+					showError: false,
 				}),
 				finish: assign({
 					showSuccess: true,
+					showError: false,
+				}),
+				setError: assign({
+					showError: true,
+					showSuccess: false,
 				}),
 			},
 		}

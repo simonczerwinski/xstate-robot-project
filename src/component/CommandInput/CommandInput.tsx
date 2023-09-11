@@ -3,12 +3,12 @@ import { ChangeEvent } from 'react';
 import clsx from 'clsx';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useMachine } from '@xstate/react';
-import { commandMachine } from '../../state-machines/command.machine';
 import { robotMachine } from '../../state-machines/robot.machine';
 import Button from '../Button';
 import { Play } from 'react-feather';
 import { RotateCcw } from 'react-feather';
 import CommandSave from '../CommandSave';
+import { useDebounce } from '../../hooks/useDebounce';
 
 type Props = {
 	roomType?: string;
@@ -17,7 +17,7 @@ type Props = {
 	startPositionX?: number;
 	startPositionY?: number;
 	robotOnReset?: boolean;
-	renderRobotAnimationFromRobotContext?: any;
+	renderRobotPropsFromRobotContextValues?: any;
 };
 
 const CommandInput: React.FC<Props> = ({
@@ -27,35 +27,29 @@ const CommandInput: React.FC<Props> = ({
 	gridHeight,
 	startPositionX,
 	startPositionY,
-	renderRobotAnimationFromRobotContext,
+	renderRobotPropsFromRobotContextValues,
 }) => {
-	const [commandState, sendCommand] = useMachine(commandMachine);
 	const [robotState, sendRobot] = useMachine(() =>
 		robotMachine(gridWidth, gridHeight, startPositionX, startPositionY)
 	);
 	const [inputValue, setInputValue] = useState('');
+	const [showError, setShowError] = useState(false);
+	const [showSuccess, setShowSuccess] = useState(false);
+	const debouncedValue = useDebounce(inputValue, 500);
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value || '';
-		console.log(inputValue);
 		setInputValue(inputValue);
 	};
-	const handleSubmit = () => {
-		if (commandState.matches('idle')) {
-			sendCommand({ type: 'SUBMIT', inputValue });
-		} else {
-			console.error('Cannot submit while the commandMachine is not idle');
-		}
-		handleCommands();
-	};
 
-	const handleReset = () => {
-		sendCommand('RESET');
-		sendRobot('RESET');
-		setInputValue('');
+	const handleSubmit = () => {
+		if (inputValue !== '') {
+			handleCommands();
+		}
 	};
 
 	const handleCommands = async () => {
+		console.log('handleCommands');
 		const commandMapper = {
 			G: 'MOVE_FORWARD',
 			H: 'TURN_RIGHT',
@@ -64,15 +58,28 @@ const CommandInput: React.FC<Props> = ({
 			R: 'TURN_RIGHT',
 			L: 'TURN_LEFT',
 		};
+		setShowError(false);
+		setShowSuccess(false);
+
+		// Regex test and check if input value contains valid commands [G, H, V, F, R, L]
+		if (/^[GHVFRL]+$/.test(inputValue.toUpperCase())) {
+			setShowSuccess(true);
+		}
+
 		const getCommands = inputValue?.toLocaleUpperCase().split('');
+
 		if (getCommands && getCommands.length > 0) {
 			for (const command of getCommands) {
 				if (commandMapper[command]) {
 					sendRobot(commandMapper[command]);
+					console.log(commandMapper[command]);
 					// Delay sending commands for smoother animation
 					await new Promise((resolve) => setTimeout(resolve, 500));
 				} else {
 					console.error(`Bad command: ${command}`);
+					sendRobot('ERROR');
+					setShowError(true);
+					break;
 				}
 			}
 			sendRobot('FINISH');
@@ -81,53 +88,60 @@ const CommandInput: React.FC<Props> = ({
 		}
 	};
 
-	useEffect(() => {
-		renderRobotAnimationFromRobotContext(robotState.context);
-	}, [robotState.context, renderRobotAnimationFromRobotContext]);
+	const handleReset = () => {
+		sendRobot('RESET');
+		setInputValue('');
+		setShowError(false);
+		setShowSuccess(false);
+	};
 
 	useEffect(() => {
-		setTimeout(() => {
-			sendCommand('LOAD');
-		}, 100);
-	}, [sendCommand, sendRobot, handleCommands]);
-
+		renderRobotPropsFromRobotContextValues(robotState.context);
+	}, [
+		inputValue,
+		debouncedValue,
+		sendRobot,
+		handleCommands,
+		renderRobotPropsFromRobotContextValues,
+	]);
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row justify-items-center mt-4">
 				<input
+					id={'commandInput-' + roomType}
 					className={clsx(
-						'h-10 mr-2 p-2 border-2 font-normal rounded bg-slate-900 text-white',
+						'h-10 mr-2 p-2 border-2 font-normal rounded bg-black text-white',
 						{
-							' border-red-500': commandState.context.showError,
-							' border-green-500': commandState.context.showSuccess,
+							' border-red-800': showError,
+							' border-green-800': showSuccess,
+							'border-teal-950': !showError && !showSuccess,
 						}
 					)}
-					placeholder="eg: VGHGV"
+					placeholder="Enter: G, H, V, F, R, L"
 					onChange={handleInputChange}
 					value={inputValue}
 				/>
 				<Button
-					className="font-bold py-2 px-4 rounded mb-10 mr-2 border-2 border-green-900"
+					id={'commandSubmit-' + roomType}
+					className="font-bold py-2 px-4 rounded mb-10 mr-2 border-2 border-white"
 					type="button"
 					onClick={handleSubmit}
 					colors={{
 						background: 'bg-transparent',
 						text: 'white',
-						hoverBackground: 'green-800',
-						hoverText: 'white',
+						hoverBackground: 'teal-600',
 					}}
 					title="Submit command"
 				>
 					<Play color="white" size={20} />
 				</Button>
 				<Button
-					className="font-bold py-2 px-4 rounded mb-10 border-2 border-blue-900"
+					className="font-bold py-2 px-4 rounded mb-10 border-2 border-gray-600"
 					type="button"
 					colors={{
 						background: 'bg-transparent',
 						text: 'white',
-						hoverBackground: 'blue-800',
-						hoverText: 'blue-100',
+						hoverBackground: 'gray-300',
 					}}
 					onClick={handleReset}
 					title="Reset robot"
@@ -137,12 +151,12 @@ const CommandInput: React.FC<Props> = ({
 							<Skeleton circle width={20} height={20} />
 						</SkeletonTheme>
 					) : (
-						<RotateCcw color="white" size={20} />
+						<RotateCcw color="gray" size={20} />
 					)}
 				</Button>
 			</div>
 
-			{commandState.context.showSuccess && robotState.context.showSuccess && (
+			{robotState.context.showSuccess && (
 				<CommandSave storeRoomType={roomType} storeCommandInput={inputValue} />
 			)}
 		</div>

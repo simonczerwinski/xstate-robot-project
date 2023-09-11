@@ -3,12 +3,12 @@ import { ChangeEvent } from 'react';
 
 // TODO: Show suggestions/ results when typing using debouncing
 
-interface Props {
+type Props = {
 	value?: string;
 	className?: string;
 	placeHolder?: string;
 	onChange: (value: string) => void;
-}
+};
 
 const Input: React.FC<Props> = ({
 	value,

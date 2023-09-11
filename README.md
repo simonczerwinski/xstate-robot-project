@@ -1,28 +1,26 @@
-# Welcome to My Robot Project - By Simon Czerwinski
+# Welcome to My Robot Machine - By Simon Czerwinski
 
-Hello there! 👋 I'm Simon Czerwinski. This is my Robot project where I showcase some of my skills as a frontend developer with full-stack experience.
+Hello there! 👋 I'm Simon Czerwinski.
 
 ## About Me
 
-I'm a frontend developer based in Halmstad, Sweden. My journey in web development started in the middle of my senior high school in the year 2011. I started my first job in January 2015. I've had the pleasure of working on a variety of projects that have honed my skills in both frontend and backend technologies.
+I'm a developer based in Halmstad, Sweden. My journey in web development started in the middle of my senior high school in the year 2011. I started my first job in January 2015. I've had the pleasure of working on a variety of projects that have honed my skills in both frontend and backend technologies.
 
 ## What You'll Find Here
 
-This repository serves as a small robot that takes commands from an input (e.g., F = Forward, R = Right, and L = Left). It can also take commands in Swedish (e.g., G = Gå (Go), H = Höger (Right), and V = Vänster (Left)). An example of an input in Swedish can be "GHHHVGGGVV".
+This repository serves as a small robot that takes commands from an input (e.g., F = Forward, R = Right, and L = Left). It can also take commands in Swedish (e.g., G = Gå (Go), H = Höger (Right), and V = Vänster (Left)). An example of an input in English can be "LFRRFFRFRFFF" Swedish can be "GHGHVGGGVVG".
 
 ## Technologies
 
 This project is built using the following technologies:
 
-- **Frontend**: I use HTML, CSS (Tailwind CSS), and the JavaScript library React.
-
-- **Styling**: Tailwind CSS 3.3.3
+- **Frontend**: I use HTML, CSS, and the JavaScript library React. I also use the UI library Tailwind CSS.
 
 - **State Management**: XState helps me manage complex UI state transitions. It provides a clear way to represent and handle different states in my applications.
 
-- **Backend**: I work with Node.js for backend development, building APIs to support my frontend applications.
+- **Test**: I use Cypress to test the frontend.
 
-- **Database**: MongoDB to save input history.
+- **Local storage**: Using local storage to save command inputs.
 
 ## Getting Started
 
@@ -83,17 +81,25 @@ or
 npx cypress open
 ```
 
-## Future Goals
+Choose E2E testing (only E2E testing available now)
 
-- **Login**: I plan to add a login system.
+## Future Goals I plan
 
-- **Api**: Improve the API handler and mocking.
+- **State management**: Add more state managements and truncate some functions
+
+- **Login**: Add a login system.
+
+- **Api**: Add SWR to fetch data and make some more magic.
+
+- **Test**: Add more test cases.
 
 - **More layouts**: I will create more layouts for the robot to choose from.
 
-- **Navbar**: Implement a menu with pages..
+- **Navbar**: Implement a menu with pages.
 
-- **Zustand**: Maybe implement Zustand to test new stuff.
+- **Zustand**: Maybe implement Zustand to test new state management magic instead of xState.
+
+- **Database**: Implement a Database like MongoDB or SupaBase instead of Local storage.
 
 ## Enjoy
 
@@ -101,7 +107,7 @@ I hope you enjoy my project. If you have any questions or feedback, feel free to
 
 - Email: [simon@czerwinski.se](mailto:simon@czerwinski.se)
 - LinkedIn: [Simon Czerwinski](https://www.linkedin.com/in/simon-edward-czerwinski-b0b9297a/)
-- Portfolio Website: [simonczerwinski.com](https://www.simonczerwinski.com)
+- Portfolio Website (Under development): [simonczerwinski.com](https://www.simonczerwinski.com)
 
 ---
 

@@ -1,6 +1,12 @@
 import { createMachine, assign } from 'xstate';
 
-export const commandMachine = createMachine(
+interface CommandContext {
+	inputValue: string;
+	showSuccess: boolean;
+	showError: boolean;
+}
+
+export const commandMachine = createMachine<CommandContext>(
 	{
 		id: 'commandMachine',
 		initial: 'idle',
@@ -11,33 +17,31 @@ export const commandMachine = createMachine(
 			showError: false,
 		},
 		states: {
-			// Set tranistion states for input value
+			// Set transition states for input value
 			idle: {
 				on: {
 					SUBMIT: 'loading',
 					RESET: 'reset',
-					SUCCESS: 'success',
-					ERROR: 'error',
 				},
 			},
 
 			// Get the input value and set it to the context
 			loading: {
-				entry: 'startLoading',
-				invoke: {
-					src: 'setInputValue',
-					onDone: {
-						target: 'success',
-						actions: assign({
-							inputValue: (context, event) => event.data,
-						}),
-					},
-					onError: {
-						target: 'error',
-						actions: (e) => {
-							console.error('error', e);
+				on: {
+					SUBMIT: [
+						{
+							target: 'success',
+							cond: 'validateInput',
+							actions: assign({
+								inputValue: (context, event) => event.value,
+							}),
 						},
-					},
+						{
+							target: 'error',
+						},
+					],
+					ERROR: 'error',
+					RESET: 'reset',
 				},
 			},
 			// Reset the input value
@@ -53,59 +57,43 @@ export const commandMachine = createMachine(
 			},
 			// Show success or error message
 			success: {
+				on: {
+					ERROR: 'error',
+				},
 				after: {
 					100: 'idle',
 				},
-				entry: 'success',
+				entry: 'setSuccess',
 			},
 			error: {
 				after: {
 					100: 'idle',
 				},
-				entry: 'error',
+				entry: 'setError',
 			},
 		},
 	},
 	{
 		// Handle response states
 		actions: {
-			startLoading: assign({
-				showSuccess: false,
-				showError: false,
-			}),
-			success: assign({
+			setSuccess: assign({
 				showSuccess: true,
 				showError: false,
 			}),
-			error: assign({
+			setError: assign({
 				showSuccess: false,
 				showError: true,
 			}),
 		},
-
-		// Handle input value and error handling
-		services: {
-			setInputValue: (context, event) => {
-				return new Promise((resolve, reject) => {
-					setTimeout(() => {
-						const input = event?.value?.toLocaleUpperCase().split('');
-						if (
-							input?.every((char) =>
-								['G', 'V', 'H', 'F', 'R', 'L'].includes(char)
-							)
-						) {
-							// Reset the error state to false when a valid input is provided
-							resolve({
-								...context,
-								showError: false,
-								inputValue: event.value,
-							});
-						} else {
-							console.error('Error: Invalid input value');
-							reject({ type: 'ERROR' });
-						}
-					}, 500);
-				});
+		// Handle input value
+		guards: {
+			validateInput: (context, event: any) => {
+				const input = event?.value?.toLocaleUpperCase().split('');
+				const validLetters = ['G', 'V', 'H', 'F', 'R', 'L'];
+				const hasInvalidLetters = input?.some(
+					(char) => !validLetters.includes(char)
+				);
+				return !hasInvalidLetters;
 			},
 		},
 	}

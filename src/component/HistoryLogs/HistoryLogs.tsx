@@ -1,28 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Text from '../Text';
 
-interface HistoryItem {
-	name?: string;
-	room?: string;
-	command?: string;
-	language?: string;
-	date?: string;
-}
+type Props = {
+	data: Array<{
+		name?: string;
+		room?: string;
+		command?: string;
+		language?: string;
+		date?: string;
+	}>;
+};
 
-interface Props {
-	data: HistoryItem[];
-}
+const HistoryLogs: React.FC<Props> = ({ data }) => {
+	const [historyData, setHistoryData] = useState(data);
+	useEffect(() => {
+		const sortHistoryToLatestDate = (a: any, b: any) => {
+			const dateA = new Date(a.date);
+			const dateB = new Date(b.date);
+			return dateB.getTime() - dateA.getTime();
+		};
 
-const HistoryList: React.FC<Props> = ({ data }) => {
+		setHistoryData(data.sort(sortHistoryToLatestDate));
+	}, [data]);
 	return (
-		<div className="bg-black bg-opacity-30 p-4 mb-8 rounded-md">
+		<div className="bg-black bg-opacity-50 p-4 mb-8 rounded-md">
 			<Text
 				as="h3"
-				text="History"
-				className="text-white text-lg font-bold p-4 text-center"
+				text="Saved history logs from previous commands"
+				className="text-white text-lg font-medium p-4 text-center"
 			/>
 			<div className="overflow-x-auto py-4">
-				<table className="min-w-full bg-black text-gray-300 divide-y divide-gray-800">
+				<table className="min-w-full bg-transparent text-white divide-y divide-gray-800">
 					<thead>
 						<tr>
 							<th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium uppercase tracking-wider">
@@ -35,20 +43,21 @@ const HistoryList: React.FC<Props> = ({ data }) => {
 								Command
 							</th>
 							<th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium uppercase tracking-wider">
-								Language
-							</th>
-							<th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium uppercase tracking-wider">
 								Date
 							</th>
 						</tr>
 					</thead>
-					<tbody className="bg-gray-800 text-gray-300 divide-y divide-gray-200">
-						{data.map((item, index) => (
+					<tbody className="text-white divide-y divide-gray-200">
+						{historyData.map((item, index) => (
 							<tr
-								className={index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-600'}
+								className={
+									index % 2 === 0
+										? 'bg-teal-800 lg:opacity-60'
+										: 'bg-teal-600 lg:opacity-80'
+								}
 								key={index}
 							>
-								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base font-bold">
+								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base font-medium">
 									{item.name}
 								</td>
 								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base">
@@ -56,9 +65,6 @@ const HistoryList: React.FC<Props> = ({ data }) => {
 								</td>
 								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base">
 									{item.command}
-								</td>
-								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base">
-									{item.language}
 								</td>
 								<td className="px-2 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-sm sm:text-base">
 									{item.date}
@@ -72,4 +78,4 @@ const HistoryList: React.FC<Props> = ({ data }) => {
 	);
 };
 
-export default HistoryList;
+export default HistoryLogs;

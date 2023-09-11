@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
 	return (
 		<footer className="relative flex flex-row mt-auto justify-center p-4 bg-black">
 			<Text
-				text={`Created by: Simon Czerwinski © ${currentYear}`}
+				text={`Created by Simon Czerwinski © ${currentYear}`}
 				as="h3"
 				className="text-center text-xs text-white"
 			/>

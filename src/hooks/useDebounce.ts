@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-interface Props {
+type Props = {
 	(callback: any, delay: number): any;
-}
+};
 
 export const useDebounce: Props = (callback, delay) => {
 	const [debouncedCallback, setDebouncedCallback] = useState(callback);

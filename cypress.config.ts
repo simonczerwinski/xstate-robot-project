@@ -8,4 +8,7 @@ export default {
 			// implement node event listeners here
 		},
 	},
+	env: {
+		xstate: 'false', // Disable XState visualizer
+	},
 };

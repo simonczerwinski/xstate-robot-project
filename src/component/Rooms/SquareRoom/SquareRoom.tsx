@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Robot from '../../Robot/Robot';
 import clsx from 'clsx';
 import CommandInput from '../../CommandInput';
+import Text from '../../Text';
 
 type Props = {
 	children?: React.ReactNode;
@@ -19,7 +20,7 @@ const Wall: React.FC<Props> = ({ children }) => {
 	return (
 		<div
 			className={clsx(
-				'relative flex justify-center items-center w-64 h-64 border-2 border-gray-100 rounded bg-black'
+				'relative flex justify-center items-center w-64 h-64 border-2 border-teal-500 rounded bg-black'
 			)}
 		>
 			{children}
@@ -35,27 +36,40 @@ const SquareRoom: React.FC<Props> = () => {
 		rotateLeft: 0,
 		rotateRight: 0,
 		showSuccess: false,
+		showError: false,
 	});
-	const { x, y, getDirection, rotateLeft, rotateRight, showSuccess } =
-		robotValues;
-
+	const {
+		x,
+		y,
+		getDirection,
+		rotateLeft,
+		rotateRight,
+		showSuccess,
+		showError,
+	} = robotValues;
 	return (
-		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-30 rounded-md p-8">
+		<div className="flex flex-col justify-center items-center relative bg-black bg-opacity-50 rounded-md p-8 mb-8">
+			<Text
+				as="h3"
+				text="Square Room"
+				className="text-white text-lg font-medium pb-4 text-center"
+			/>
 			<Wall>
 				<div className="w-[200px] h-[200px] flex justify-center items-center z-0">
 					<div className="relative flex flex-col w-full h-full">
 						<Robot
-							id="robot"
+							id="robotSquare"
 							x={x}
 							y={y}
 							direction={getDirection}
-							turnRight={rotateRight}
-							turnLeft={rotateLeft}
+							rotateRight={rotateRight}
+							rotateLeft={rotateLeft}
 							finished={showSuccess}
+							error={showError}
 							animation={{
 								top: `${y * cellSize}px`,
 								left: `${x * cellSize}px`,
-								transform: `translate(-10%, -20%)`,
+								// transform: `translate(-10%, -20%)`,
 								transition: 'all 0.3s linear',
 							}}
 						/>
@@ -69,7 +83,7 @@ const SquareRoom: React.FC<Props> = () => {
 					gridWidth={gridWidth}
 					startPositionX={startPositionX}
 					startPositionY={startPositionY}
-					renderRobotAnimationFromRobotContext={setRobotValues}
+					renderRobotPropsFromRobotContextValues={setRobotValues}
 				/>
 			</div>
 		</div>
