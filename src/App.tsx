@@ -4,11 +4,13 @@ import Text from './component/Text/Text';
 import Footer from './component/Footer/Footer';
 import HistoryLogs from './component/HistoryLogs/HistoryLogs';
 import './App.css';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { SquareRoom, CircleRoom } from './component/Rooms';
 
 const App: React.FC = () => {
 	const [commandHistoryLogs, setCommandHistoryLogs] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const renderHistoryLogs = () => {
 		// Load data from the local storage
@@ -17,13 +19,14 @@ const App: React.FC = () => {
 			? JSON.parse(commandHistoryLogsString)
 			: [];
 		setCommandHistoryLogs(commandHistoryLogs);
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
 		setTimeout(() => {
 			renderHistoryLogs();
 		}, 1000);
-	}, [renderHistoryLogs]);
+	}, [renderHistoryLogs, isLoading]);
 	return (
 		<MasterLayout>
 			<video
@@ -51,7 +54,13 @@ const App: React.FC = () => {
 						<CircleRoom renderHistoryAndUpdate={renderHistoryLogs} />
 					</div>
 					<div className="relative flex flex-row justify-center items-center mx-auto pt-10">
-						<HistoryLogs data={commandHistoryLogs} />
+						{isLoading ? (
+							<SkeletonTheme baseColor="#0c766ea8" highlightColor="#0d3837eb">
+								<Skeleton count={6} width={300} height={30} />
+							</SkeletonTheme>
+						) : (
+							<HistoryLogs data={commandHistoryLogs} />
+						)}
 					</div>
 				</div>
 			</main>
