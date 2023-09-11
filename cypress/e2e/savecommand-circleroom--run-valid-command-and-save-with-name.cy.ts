@@ -1,4 +1,4 @@
-describe('Add valid input command in SquareRoom and succeed, then save with name', () => {
+describe('Add valid input command in CircleRoom and succeed, then save with name', () => {
 	beforeEach(() => {
 		cy.visit('http://localhost:3000');
 	});
