@@ -1,10 +1,5 @@
 # Welcome to My Robot Machine - By Simon Czerwinski
-
-Hello there! 👋 I'm Simon Czerwinski.
-
-## About Me
-
-I'm a developer based in Halmstad, Sweden. My journey in web development started in the middle of my senior high school in the year 2011. I started my first job in January 2015. I've had the pleasure of working on a variety of projects that have honed my skills in both frontend and backend technologies.
+![screenshot-sc-robot-project](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/64ff3c94-1367-47a0-a88a-44900efdb59a)
 
 ## What You'll Find Here
 
