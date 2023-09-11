@@ -4,7 +4,7 @@
 
 ## What You'll Find Here
 
-This repository serves as a small robot that takes commands from an input (e.g., F = Forward, R = Right, and L = Left). It can also take commands in Swedish (e.g., G = Gå (Go), H = Höger (Right), and V = Vänster (Left)). An example of an input in English can be "LFRRFFRFRFFF" Swedish can be "GHGHVGGGVVG".
+This repository serves as a small robot that takes commands from an input (e.g., F = Forward, R = Right, and L = Left). It can also take commands in Swedish (e.g., G = Gå (Go), H = Höger (Right), and V = Vänster (Left)). An example of an input in English can be "LFRRFFRFRFFF" and in Swedish it can be "GHGHVGGGVVG".
 
 ## Technologies
 
