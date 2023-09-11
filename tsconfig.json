@@ -5,10 +5,8 @@
 			"@/*": ["./src/*"],
 			"components/*": ["./src/components/*"],
 			"hooks/*": ["./src/hooks/*"],
-			"models/*": ["./src/models/*"],
-			"hooks": ["./src/hooks"],
-			"layouts/*": ["./src/layouts/*"],
-			"theme/*": ["./src/theme/*"],
+			"layout/*": ["./src/layout/*"],
+			"state-machines/*": ["src/state-machines/*"],
 			"public/*": ["public/*"]
 		},
 		"target": "es5",
