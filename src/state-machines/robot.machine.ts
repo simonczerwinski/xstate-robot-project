@@ -150,7 +150,6 @@ export const robotMachine = (
 				// Get the direction of the robot by checking the value of context.direction
 				getDirection: assign({
 					getDirection: (context) => {
-						console.log(context.direction);
 						switch (context.direction) {
 							case 0:
 								return (context.getDirection = 'N');

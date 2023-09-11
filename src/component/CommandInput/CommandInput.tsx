@@ -51,7 +51,6 @@ const CommandInput: React.FC<Props> = ({
 	};
 
 	const handleCommands = async () => {
-		console.log('handleCommands');
 		const commandMapper = {
 			G: 'MOVE_FORWARD',
 			H: 'TURN_RIGHT',
@@ -74,7 +73,6 @@ const CommandInput: React.FC<Props> = ({
 			for (const command of getCommands) {
 				if (commandMapper[command]) {
 					sendRobot(commandMapper[command]);
-					console.log(commandMapper[command]);
 					// Delay sending commands for smoother animation
 					await new Promise((resolve) => setTimeout(resolve, 500));
 				} else {
