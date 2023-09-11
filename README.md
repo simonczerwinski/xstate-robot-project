@@ -18,7 +18,7 @@ This project is built using the following technologies:
 
 - **State Management**: XState helps me manage complex UI state transitions. It provides a clear way to represent and handle different states in my applications.
 
-- **Test**: I use Cypress to test the frontend.
+- **Test**: I use Cypress to test the frontend (only E2E test is configured).
 
 - **Local storage**: Using local storage to save command inputs.
 
@@ -35,7 +35,7 @@ npm install
 After the installation is done, make sure you are in the project directory, then run:
 
 ```bash
-npm start
+npm run start
 ```
 
 This runs the app in the development mode.
@@ -43,15 +43,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-To run tests, use:
-
-```bash
-npm test
-```
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 To build the app for production to the build folder, use:
 
@@ -66,7 +57,7 @@ The build is minified and the filenames include the hashes.
 To run Cypress tests, make sure the app is running by starting it with:
 
 ```bash
-npm start
+npm run start
 ```
 
 Then, open a new terminal and run the following script:
