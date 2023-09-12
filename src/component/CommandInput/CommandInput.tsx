@@ -105,54 +105,61 @@ const CommandInput: React.FC<Props> = ({
 	]);
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row justify-items-center mt-4">
-				<input
-					id={'commandInput-' + roomType}
-					className={clsx(
-						'h-10 mr-2 p-2 border-2 font-normal rounded bg-black text-white',
-						{
-							' border-red-800': showError,
-							' border-green-800': showSuccess,
-							'border-teal-950': !showError && !showSuccess,
-						}
-					)}
-					placeholder="Enter: G, H, V, F, R, L"
-					onChange={handleInputChange}
-					value={inputValue}
-				/>
-				<Button
-					id={'commandSubmit-' + roomType}
-					className="font-bold py-2 px-4 rounded mb-10 mr-2 border-2 border-white"
-					type="button"
-					onClick={handleSubmit}
-					colors={{
-						background: 'bg-transparent',
-						text: 'white',
-						hoverBackground: 'teal-600',
-					}}
-					title="Submit command"
-				>
-					<Play color="white" size={20} />
-				</Button>
-				<Button
-					className="font-bold py-2 px-4 rounded mb-10 border-2 border-gray-600"
-					type="button"
-					colors={{
-						background: 'bg-transparent',
-						text: 'white',
-						hoverBackground: 'gray-300',
-					}}
-					onClick={handleReset}
-					title="Reset robot"
-				>
-					{robotOnReset ? (
-						<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
-							<Skeleton circle width={20} height={20} />
-						</SkeletonTheme>
-					) : (
-						<RotateCcw color="gray" size={20} />
-					)}
-				</Button>
+			<div className="relative flex flex-row justify-center mt-4 mb-8">
+				<div className="flex flex-col">
+					<label className="text-white ml-1 pb-1 text-medium">
+						Enter commands:
+					</label>
+					<input
+						id={'commandInput-' + roomType}
+						className={clsx(
+							'h-10 mr-2 p-2 border-2 font-normal text-medium rounded bg-black text-white text-sm',
+							{
+								' border-red-800': showError,
+								' border-green-800': showSuccess,
+								'border-teal-950': !showError && !showSuccess,
+							}
+						)}
+						placeholder="E.g. 'GGHGV' or 'FFRFL'"
+						onChange={handleInputChange}
+						value={inputValue}
+					/>
+				</div>
+				<div className="flex flex-row items-end">
+					<Button
+						id={'commandSubmit-' + roomType}
+						className="font-bold py-2 px-4 rounded mr-2 border-2 border-white"
+						type="button"
+						onClick={handleSubmit}
+						colors={{
+							background: 'bg-transparent',
+							text: 'white',
+							hoverBackground: 'teal-600',
+						}}
+						title="Submit command"
+					>
+						<Play color="white" size={20} />
+					</Button>
+					<Button
+						className="font-bold py-2 px-4 rounded border-2 border-gray-600"
+						type="button"
+						colors={{
+							background: 'bg-transparent',
+							text: 'white',
+							hoverBackground: 'gray-300',
+						}}
+						onClick={handleReset}
+						title="Reset robot"
+					>
+						{robotOnReset ? (
+							<SkeletonTheme baseColor="#0b255b" highlightColor="#0d2d6c">
+								<Skeleton circle width={20} height={20} />
+							</SkeletonTheme>
+						) : (
+							<RotateCcw color="gray" size={20} />
+						)}
+					</Button>
+				</div>
 			</div>
 
 			{robotState.context.showSuccess && (

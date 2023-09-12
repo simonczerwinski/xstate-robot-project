@@ -58,6 +58,20 @@ const SquareRoom: React.FC<Props> = ({ renderHistoryAndUpdate }) => {
 			<Wall>
 				<div className="w-[200px] h-[200px] flex justify-center items-center z-0">
 					<div className="relative flex flex-col w-full h-full">
+						<div className="text-white">
+							<div className="absolute top-[-1rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
+								<Text text="N" as="span" className="text-xl font-normal" />
+							</div>
+							<div className="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 text-center text-xs">
+								<Text text="S" as="span" className="text-xl font-normal" />
+							</div>
+							<div className="absolute left-[-1rem] top-1/2 transform -translate-y-1/2 text-center text-xs flex justify-center items-center">
+								<Text text="V" as="span" className="text-xl font-normal" />
+							</div>
+							<div className="absolute right-[-1rem] top-1/2 transform -translate-y-1/2 text-center text-xs flex justify-center items-center">
+								<Text text="Ö" as="span" className="text-xl font-normal" />
+							</div>
+						</div>
 						<Robot
 							id="robotSquare"
 							x={x}
@@ -77,7 +91,7 @@ const SquareRoom: React.FC<Props> = ({ renderHistoryAndUpdate }) => {
 					</div>
 				</div>
 			</Wall>
-			<div className="flex flex-col">
+			<div className="relative flex pt-4">
 				<CommandInput
 					roomType={room}
 					gridHeight={gridHeight}
