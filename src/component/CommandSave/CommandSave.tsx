@@ -60,7 +60,7 @@ const CommandSave: React.FC<CommandSaveProps> = ({
 			{showSaveButton && (
 				<Button
 					id={'saveButton-' + storeRoomType}
-					className={clsx('font-bold py-2 px-4 rounded mb-10 mr-2 ', {
+					className={clsx('font-bold py-2 px-4 rounded mb-4 mr-2 ', {
 						' bg-green-900': saveSuccess,
 					})}
 					type="button"
