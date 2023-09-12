@@ -1,6 +1,6 @@
 # Welcome to the Robot Machine - By Simon Czerwinski
 
-![screenshot-sc-robot](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/e69a2ecc-4687-4f6e-89ac-074105777295)
+![screenshot-sc-robot](https://github.com/simonczerwinski/sc-robot-project/assets/20460571/343c4f3c-0733-4cae-9064-f1041ed4ca3d)
 
 ## What You'll Find Here
 
