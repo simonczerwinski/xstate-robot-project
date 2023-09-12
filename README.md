@@ -70,13 +70,15 @@ Choose E2E testing (only E2E testing available now)
 
 ## Future goals I plan
 
+- **Dictionaries**: Handle languages
+
 - **New UI and controlls**: Add keyboard handlers. E.g. Keyboard arrow controlls to move the robot around. New text prompts with words instead of letters.
 
 - **State management**: Add more state managements and move some functions to separate files
 
 - **Login**: Add a login system.
 
-- **Api**: Add SWR to fetch data and make some more magic.
+- **Api**: Add SWR to fetch data and make some more magic when the User makes commands.
 
 - **Test**: Add more test cases.
 
