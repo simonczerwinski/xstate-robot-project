@@ -72,7 +72,7 @@ Choose E2E testing (only E2E testing available now)
 
 - **Dictionaries**: Handle languages
 
-- **New UI and controlls**: Add keyboard handlers. E.g. Keyboard arrow controlls to move the robot around. New text prompts with words instead of letters.
+- **New UI and controlls**: Add keyboard handlers. E.g. Keyboard arrow controlls to move the robot around. New AI text prompts with words instead of letters.
 
 - **State management**: Add more state managements and move some functions to separate files
 
