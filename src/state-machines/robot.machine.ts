@@ -45,7 +45,7 @@ export const robotMachine = (
 						100: 'idle',
 					},
 				},
-				// Set tranistion states for robot movement
+				// Set transition states for robot movement
 				idle: {
 					on: {
 						MOVE_FORWARD: {
